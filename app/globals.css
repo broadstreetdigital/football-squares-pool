@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --turf-green: #1a4d2e;
+    --turf-dark: #0f3820;
+    --stadium-gold: #fbbf24;
+    --scoreboard-bg: #1a1a1a;
+    --scoreboard-text: #00ff41;
+  }
+
+  body {
+    @apply bg-turf-gradient text-white;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .stadium-card {
+    @apply bg-scoreboard-bg/90 backdrop-blur-sm shadow-scoreboard rounded-lg border border-white/10;
+  }
+
+  .btn-primary {
+    @apply bg-stadium-gold hover:bg-stadium-gold-dark text-turf-600 font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-gold-glow;
+  }
+
+  .btn-secondary {
+    @apply bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg border border-white/20 transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-stadium-gold focus:ring-2 focus:ring-stadium-gold/50 transition-all;
+  }
+
+  .square {
+    @apply aspect-square flex items-center justify-center text-xs sm:text-sm font-semibold border border-white/30 cursor-pointer transition-all duration-200 hover:scale-105;
+  }
+
+  .square-unclaimed {
+    @apply bg-turf-500/30 hover:bg-turf-400/40 text-white/70;
+  }
+
+  .square-claimed {
+    @apply bg-white/10 text-white;
+  }
+
+  .square-mine {
+    @apply bg-stadium-gold/30 text-stadium-gold border-stadium-gold;
+  }
+
+  .square-winner {
+    @apply bg-stadium-gold text-turf-900 animate-pulse-gold shadow-gold-glow;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+  }
+
+  .status-open {
+    @apply bg-green-500/20 text-green-300 border border-green-500/50;
+  }
+
+  .status-locked {
+    @apply bg-yellow-500/20 text-yellow-300 border border-yellow-500/50;
+  }
+
+  .status-numbered {
+    @apply bg-blue-500/20 text-blue-300 border border-blue-500/50;
+  }
+
+  .status-completed {
+    @apply bg-purple-500/20 text-purple-300 border border-purple-500/50;
+  }
+
+  .scoreboard-text {
+    @apply font-display text-scoreboard-text;
+  }
+}
+
+@layer utilities {
+  .bg-yard-pattern {
+    background-image: var(--tw-gradient-to), var(--tw-gradient-stops), repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 9%,
+      rgba(255, 255, 255, 0.03) 9%,
+      rgba(255, 255, 255, 0.03) 10%
+    );
+  }
+}
