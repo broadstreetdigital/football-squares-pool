@@ -8,7 +8,6 @@ import { requireAuth } from '@/lib/auth/session';
 import { unclaimSquare } from '@/lib/db/repositories/squares';
 import { logEvent } from '@/lib/db/repositories/events';
 
-export const runtime = 'edge';
 
 export async function DELETE(
   request: NextRequest,

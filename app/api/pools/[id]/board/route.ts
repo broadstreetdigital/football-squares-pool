@@ -10,7 +10,6 @@ import { getPoolSquares, getUserSquareCount } from '@/lib/db/repositories/square
 import { getAxisAssignment } from '@/lib/db/repositories/axis';
 import { getPoolScores } from '@/lib/db/repositories/scores';
 
-export const runtime = 'edge';
 
 export async function GET(
   request: NextRequest,

@@ -8,7 +8,6 @@ import { joinPoolSchema } from '@/lib/utils/validation';
 import { findPoolById } from '@/lib/db/repositories/pools';
 import { verifyPassword } from '@/lib/auth/password';
 
-export const runtime = 'edge';
 
 export async function POST(
   request: NextRequest,

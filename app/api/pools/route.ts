@@ -11,7 +11,6 @@ import { logEvent } from '@/lib/db/repositories/events';
 import { hashPassword } from '@/lib/auth/password';
 import { generateInviteCode } from '@/lib/utils/id';
 
-export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {

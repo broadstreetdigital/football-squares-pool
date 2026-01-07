@@ -10,7 +10,6 @@ import { createAxisAssignment } from '@/lib/db/repositories/axis';
 import { logEvent } from '@/lib/db/repositories/events';
 import { generateRandomDigits } from '@/lib/game/randomize';
 
-export const runtime = 'edge';
 
 export async function POST(
   request: NextRequest,

@@ -11,7 +11,6 @@ import { createToken } from '@/lib/auth/jwt';
 import { createUser, findUserByEmail } from '@/lib/db/repositories/users';
 import { getCookieOptions } from '@/lib/auth/session';
 
-export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {

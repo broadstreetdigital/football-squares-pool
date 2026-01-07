@@ -8,7 +8,6 @@ import { requireAuth } from '@/lib/auth/session';
 import { findPoolById, updatePoolStatus } from '@/lib/db/repositories/pools';
 import { logEvent } from '@/lib/db/repositories/events';
 
-export const runtime = 'edge';
 
 export async function POST(
   request: NextRequest,

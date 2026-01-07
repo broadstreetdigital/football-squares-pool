@@ -13,7 +13,6 @@ import {
 import { updatePoolSchema } from '@/lib/utils/validation';
 import { logEvent } from '@/lib/db/repositories/events';
 
-export const runtime = 'edge';
 
 export async function GET(
   request: NextRequest,

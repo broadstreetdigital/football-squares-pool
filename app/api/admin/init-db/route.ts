@@ -7,7 +7,6 @@
 import { NextResponse } from 'next/server';
 import { initializeSchema } from '@/lib/db/client';
 
-export const runtime = 'edge';
 
 const SCHEMA_SQL = `
 -- Football Squares Pool Database Schema

@@ -10,7 +10,6 @@ import { getAxisAssignment } from '@/lib/db/repositories/axis';
 import { getPoolScores } from '@/lib/db/repositories/scores';
 import { calculateAllWinners } from '@/lib/game/winners';
 
-export const runtime = 'edge';
 
 export async function GET(
   request: NextRequest,

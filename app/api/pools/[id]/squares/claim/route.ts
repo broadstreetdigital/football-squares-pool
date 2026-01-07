@@ -10,7 +10,6 @@ import { claimSquares } from '@/lib/db/repositories/squares';
 import { logEvent } from '@/lib/db/repositories/events';
 import { getUserPublic } from '@/lib/db/repositories/users';
 
-export const runtime = 'edge';
 
 export async function POST(
   request: NextRequest,

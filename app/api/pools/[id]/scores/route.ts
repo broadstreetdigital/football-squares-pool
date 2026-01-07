@@ -10,7 +10,6 @@ import { updateScoresSchema } from '@/lib/utils/validation';
 import { upsertScore } from '@/lib/db/repositories/scores';
 import { logEvent } from '@/lib/db/repositories/events';
 
-export const runtime = 'edge';
 
 export async function PUT(
   request: NextRequest,
