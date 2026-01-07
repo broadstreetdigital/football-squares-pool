@@ -59,7 +59,11 @@ export async function claimSquares(data: ClaimSquaresData): Promise<void> {
     }
 
     // Check user hasn't exceeded limit
-    const currentCount = getUserSquareCount(pool_id, user_id);
+    const countResult = queryOne<{ count: number }>(
+      'SELECT COUNT(*) as count FROM squares WHERE pool_id = ? AND claimed_by_user_id = ?',
+      [pool_id, user_id]
+    );
+    const currentCount = countResult?.count || 0;
     const poolData = queryOne<Pool>('SELECT max_squares_per_user FROM pools WHERE id = ?', [pool_id]);
 
     if (!poolData) {
