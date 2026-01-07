@@ -102,7 +102,7 @@ CREATE INDEX IF NOT EXISTS idx_event_log_pool ON event_log(pool_id, created_at D
 CREATE INDEX IF NOT EXISTS idx_event_log_type ON event_log(type, created_at DESC);
 `;
 
-export async function POST() {
+async function initDb() {
   try {
     initializeSchema(SCHEMA_SQL);
 
@@ -121,4 +121,12 @@ export async function POST() {
       { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  return initDb();
+}
+
+export async function POST() {
+  return initDb();
 }
