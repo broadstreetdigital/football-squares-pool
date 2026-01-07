@@ -25,22 +25,33 @@ export interface Statement {
  * In local dev, falls back to file-based SQLite
  */
 export function getDatabase(): Database {
-  // Try to access Cloudflare D1 database from environment
-  // In Cloudflare Workers/Webflow Cloud, env is available via process.env or globalThis
+  // In Cloudflare Workers (Webflow Cloud), bindings are available via getBindingsProxy
+  // @ts-ignore - Cloudflare platform global
+  if (typeof platformBinding !== 'undefined') {
+    try {
+      // @ts-ignore
+      const db = platformBinding('DB');
+      if (db) return db as Database;
+    } catch (e) {
+      // Binding not available
+    }
+  }
+
+  // Try process.env.DB (Cloudflare Workers with OpenNext)
   // @ts-ignore - Cloudflare Workers runtime
   if (typeof process !== 'undefined' && process.env?.DB) {
     // @ts-ignore
     return process.env.DB as Database;
   }
 
-  // Try global DB binding (Cloudflare Workers pattern)
+  // Try global DB binding
   // @ts-ignore - Cloudflare Workers runtime global
   if (typeof DB !== 'undefined') {
     // @ts-ignore
     return DB as Database;
   }
 
-  // Try accessing from globalThis (another Cloudflare pattern)
+  // Try accessing from globalThis
   // @ts-ignore
   if (typeof globalThis !== 'undefined' && globalThis.DB) {
     // @ts-ignore
@@ -48,8 +59,6 @@ export function getDatabase(): Database {
   }
 
   // Local development fallback
-  // This will be replaced with actual SQLite implementation via better-sqlite3
-  // but for edge runtime compatibility, we keep this abstraction
   throw new Error(
     'Database not available. In production, Webflow Cloud provides DB binding. ' +
     'For local development, you need to set up SQLite manually or use mock.'
