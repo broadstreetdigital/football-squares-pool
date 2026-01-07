@@ -25,11 +25,26 @@ export interface Statement {
  * In local dev, falls back to file-based SQLite
  */
 export function getDatabase(): Database {
-  // Webflow Cloud provides DB via environment binding
-  // @ts-ignore - Webflow Cloud runtime global
+  // Try to access Cloudflare D1 database from environment
+  // In Cloudflare Workers/Webflow Cloud, env is available via process.env or globalThis
+  // @ts-ignore - Cloudflare Workers runtime
+  if (typeof process !== 'undefined' && process.env?.DB) {
+    // @ts-ignore
+    return process.env.DB as Database;
+  }
+
+  // Try global DB binding (Cloudflare Workers pattern)
+  // @ts-ignore - Cloudflare Workers runtime global
   if (typeof DB !== 'undefined') {
     // @ts-ignore
     return DB as Database;
+  }
+
+  // Try accessing from globalThis (another Cloudflare pattern)
+  // @ts-ignore
+  if (typeof globalThis !== 'undefined' && globalThis.DB) {
+    // @ts-ignore
+    return globalThis.DB as Database;
   }
 
   // Local development fallback
