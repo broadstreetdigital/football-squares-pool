@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiUrl } from '@/lib/utils/api';
 
 export function CreatePoolForm() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export function CreatePoolForm() {
     };
 
     try {
-      const res = await fetch('/api/pools', {
+      const res = await fetch(apiUrl('/api/pools'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
