@@ -1,7 +1,5 @@
 {
-  "cosmic": {
-    "framework": "nextjs",
-    "buildCommand": "npm run build",
-    "devCommand": "npm run dev"
+  "cloud": {
+    "framework": "nextjs"
   }
 }
