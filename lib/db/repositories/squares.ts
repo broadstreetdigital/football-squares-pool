@@ -14,7 +14,7 @@ export interface ClaimSquaresData {
 }
 
 export async function getPoolSquares(poolId: string): Promise<Square[]> {
-  return query<Square>(
+  return await query<Square>(
     'SELECT * FROM squares WHERE pool_id = ? ORDER BY row, col',
     [poolId]
   );
@@ -25,7 +25,7 @@ export async function getSquare(
   row: number,
   col: number
 ): Promise<Square | null> {
-  const square = queryOne<Square>(
+  const square = await queryOne<Square>(
     'SELECT * FROM squares WHERE pool_id = ? AND row = ? AND col = ?',
     [poolId, row, col]
   );
@@ -37,7 +37,7 @@ export async function getUserSquareCount(
   poolId: string,
   userId: string
 ): Promise<number> {
-  const result = queryOne<{ count: number }>(
+  const result = await queryOne<{ count: number }>(
     'SELECT COUNT(*) as count FROM squares WHERE pool_id = ? AND claimed_by_user_id = ?',
     [poolId, userId]
   );
@@ -48,9 +48,9 @@ export async function getUserSquareCount(
 export async function claimSquares(data: ClaimSquaresData): Promise<void> {
   const { pool_id, user_id, display_name, email, squares: squaresToClaim } = data;
 
-  transaction(() => {
+  await transaction(async () => {
     // Verify pool is open
-    const pool = queryOne<Pool>('SELECT status FROM pools WHERE id = ?', [
+    const pool = await queryOne<Pool>('SELECT status FROM pools WHERE id = ?', [
       pool_id,
     ]);
 
@@ -59,12 +59,12 @@ export async function claimSquares(data: ClaimSquaresData): Promise<void> {
     }
 
     // Check user hasn't exceeded limit
-    const countResult = queryOne<{ count: number }>(
+    const countResult = await queryOne<{ count: number }>(
       'SELECT COUNT(*) as count FROM squares WHERE pool_id = ? AND claimed_by_user_id = ?',
       [pool_id, user_id]
     );
     const currentCount = countResult?.count || 0;
-    const poolData = queryOne<Pool>('SELECT max_squares_per_user FROM pools WHERE id = ?', [pool_id]);
+    const poolData = await queryOne<Pool>('SELECT max_squares_per_user FROM pools WHERE id = ?', [pool_id]);
 
     if (!poolData) {
       throw new Error('Pool not found');
@@ -81,7 +81,7 @@ export async function claimSquares(data: ClaimSquaresData): Promise<void> {
 
     for (const { row, col } of squaresToClaim) {
       // Check square is unclaimed
-      const existing = queryOne<Square>(
+      const existing = await queryOne<Square>(
         'SELECT claimed_by_user_id FROM squares WHERE pool_id = ? AND row = ? AND col = ?',
         [pool_id, row, col]
       );
@@ -91,7 +91,7 @@ export async function claimSquares(data: ClaimSquaresData): Promise<void> {
       }
 
       // Claim it
-      execute(
+      await execute(
         `UPDATE squares
          SET claimed_by_user_id = ?,
              claimed_display_name = ?,
@@ -110,9 +110,9 @@ export async function unclaimSquare(
   col: number,
   userId: string
 ): Promise<void> {
-  transaction(() => {
+  await transaction(async () => {
     // Verify pool is open
-    const pool = queryOne<Pool>('SELECT status FROM pools WHERE id = ?', [
+    const pool = await queryOne<Pool>('SELECT status FROM pools WHERE id = ?', [
       poolId,
     ]);
 
@@ -121,7 +121,7 @@ export async function unclaimSquare(
     }
 
     // Verify user owns this square
-    const square = queryOne<Square>(
+    const square = await queryOne<Square>(
       'SELECT claimed_by_user_id FROM squares WHERE pool_id = ? AND row = ? AND col = ?',
       [poolId, row, col]
     );
@@ -135,7 +135,7 @@ export async function unclaimSquare(
     }
 
     // Unclaim it
-    execute(
+    await execute(
       `UPDATE squares
        SET claimed_by_user_id = NULL,
            claimed_display_name = NULL,
@@ -157,7 +157,7 @@ export async function ownerClaimSquare(
   const claimedAt = Date.now();
 
   // Owner can claim on behalf of others even when locked
-  const square = queryOne<Square>(
+  const square = await queryOne<Square>(
     'SELECT claimed_by_user_id FROM squares WHERE pool_id = ? AND row = ? AND col = ?',
     [poolId, row, col]
   );
@@ -166,7 +166,7 @@ export async function ownerClaimSquare(
     throw new Error('Square is already claimed');
   }
 
-  execute(
+  await execute(
     `UPDATE squares
      SET claimed_by_user_id = NULL,
          claimed_display_name = ?,
@@ -178,14 +178,14 @@ export async function ownerClaimSquare(
 }
 
 export async function getUnclaimedSquares(poolId: string): Promise<Square[]> {
-  return query<Square>(
+  return await query<Square>(
     'SELECT * FROM squares WHERE pool_id = ? AND claimed_by_user_id IS NULL AND claimed_display_name IS NULL',
     [poolId]
   );
 }
 
 export async function getClaimedSquaresCount(poolId: string): Promise<number> {
-  const result = queryOne<{ count: number }>(
+  const result = await queryOne<{ count: number }>(
     `SELECT COUNT(*) as count FROM squares
      WHERE pool_id = ? AND (claimed_by_user_id IS NOT NULL OR claimed_display_name IS NOT NULL)`,
     [poolId]

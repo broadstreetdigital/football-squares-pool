@@ -37,9 +37,9 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
   const id = generateId();
   const createdAt = Date.now();
 
-  const pool = transaction(() => {
+  const pool = await transaction(async () => {
     // Create pool
-    execute(
+    await execute(
       `INSERT INTO pools (
         id, owner_id, name, game_name, game_time, entry_fee_info,
         square_price, max_squares_per_user, visibility, invite_code_hash,
@@ -72,26 +72,26 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
       }
     }
 
-    execute(
+    await execute(
       `INSERT INTO squares (pool_id, row, col, claimed_by_user_id, claimed_display_name, claimed_email, claimed_at)
        VALUES ${squareValues.join(', ')}`
     );
 
-    return queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id])!;
+    return await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id])!;
   });
 
   return pool;
 }
 
 export async function findPoolById(id: string): Promise<Pool | null> {
-  const pool = queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id]);
+  const pool = await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id]);
   return pool || null;
 }
 
 export async function findPoolWithOwner(
   id: string
 ): Promise<PoolWithOwner | null> {
-  const pool = queryOne<PoolWithOwner>(
+  const pool = await queryOne<PoolWithOwner>(
     `SELECT p.*, u.name as owner_name, u.email as owner_email
      FROM pools p
      JOIN users u ON p.owner_id = u.id
@@ -103,7 +103,7 @@ export async function findPoolWithOwner(
 }
 
 export async function findPoolsByOwner(ownerId: string): Promise<Pool[]> {
-  return query<Pool>(
+  return await query<Pool>(
     'SELECT * FROM pools WHERE owner_id = ? ORDER BY created_at DESC',
     [ownerId]
   );
@@ -111,7 +111,7 @@ export async function findPoolsByOwner(ownerId: string): Promise<Pool[]> {
 
 export async function findPoolsByUser(userId: string): Promise<Pool[]> {
   // Pools where user has claimed at least one square
-  return query<Pool>(
+  return await query<Pool>(
     `SELECT DISTINCT p.*
      FROM pools p
      JOIN squares s ON p.id = s.pool_id
@@ -168,22 +168,22 @@ export async function updatePool(
   if (updates.length === 0) return;
 
   values.push(id);
-  execute(`UPDATE pools SET ${updates.join(', ')} WHERE id = ?`, values);
+  await execute(`UPDATE pools SET ${updates.join(', ')} WHERE id = ?`, values);
 }
 
 export async function updatePoolStatus(
   id: string,
   status: Pool['status']
 ): Promise<void> {
-  execute('UPDATE pools SET status = ? WHERE id = ?', [status, id]);
+  await execute('UPDATE pools SET status = ? WHERE id = ?', [status, id]);
 }
 
 export async function deletePool(id: string): Promise<void> {
-  execute('DELETE FROM pools WHERE id = ?', [id]);
+  await execute('DELETE FROM pools WHERE id = ?', [id]);
 }
 
 export async function getPublicPools(limit = 20, offset = 0): Promise<Pool[]> {
-  return query<Pool>(
+  return await query<Pool>(
     `SELECT * FROM pools
      WHERE visibility = 'public'
      ORDER BY created_at DESC

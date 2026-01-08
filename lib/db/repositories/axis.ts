@@ -12,7 +12,7 @@ export async function createAxisAssignment(
 ): Promise<AxisAssignment> {
   const randomizedAt = Date.now();
 
-  execute(
+  await execute(
     `INSERT INTO axis_assignments (pool_id, x_digits_json, y_digits_json, randomized_at)
      VALUES (?, ?, ?, ?)
      ON CONFLICT(pool_id) DO UPDATE SET
@@ -33,7 +33,7 @@ export async function createAxisAssignment(
 export async function getAxisAssignment(
   poolId: string
 ): Promise<AxisAssignment | null> {
-  const axis = queryOne<AxisAssignment>(
+  const axis = await queryOne<AxisAssignment>(
     'SELECT * FROM axis_assignments WHERE pool_id = ?',
     [poolId]
   );
@@ -42,5 +42,5 @@ export async function getAxisAssignment(
 }
 
 export async function deleteAxisAssignment(poolId: string): Promise<void> {
-  execute('DELETE FROM axis_assignments WHERE pool_id = ?', [poolId]);
+  await execute('DELETE FROM axis_assignments WHERE pool_id = ?', [poolId]);
 }

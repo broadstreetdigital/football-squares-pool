@@ -26,7 +26,7 @@ export async function logEvent(
   const id = generateId();
   const createdAt = Date.now();
 
-  execute(
+  await execute(
     `INSERT INTO event_log (id, pool_id, actor_user_id, type, payload_json, created_at)
      VALUES (?, ?, ?, ?, ?, ?)`,
     [id, poolId, actorUserId, type, JSON.stringify(payload), createdAt]
@@ -46,7 +46,7 @@ export async function getPoolEvents(
   poolId: string,
   limit = 100
 ): Promise<EventLog[]> {
-  return query<EventLog>(
+  return await query<EventLog>(
     'SELECT * FROM event_log WHERE pool_id = ? ORDER BY created_at DESC LIMIT ?',
     [poolId, limit]
   );
@@ -56,7 +56,7 @@ export async function getEventsByType(
   type: EventType,
   limit = 100
 ): Promise<EventLog[]> {
-  return query<EventLog>(
+  return await query<EventLog>(
     'SELECT * FROM event_log WHERE type = ? ORDER BY created_at DESC LIMIT ?',
     [type, limit]
   );

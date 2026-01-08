@@ -13,7 +13,7 @@ export async function upsertScore(
 ): Promise<Score> {
   const updatedAt = Date.now();
 
-  execute(
+  await execute(
     `INSERT INTO scores (pool_id, bucket, home_score, away_score, updated_at)
      VALUES (?, ?, ?, ?, ?)
      ON CONFLICT(pool_id, bucket) DO UPDATE SET
@@ -33,7 +33,7 @@ export async function upsertScore(
 }
 
 export async function getPoolScores(poolId: string): Promise<Score[]> {
-  return query<Score>(
+  return await query<Score>(
     `SELECT * FROM scores WHERE pool_id = ?
      ORDER BY
        CASE bucket
@@ -51,7 +51,7 @@ export async function getScore(
   poolId: string,
   bucket: Score['bucket']
 ): Promise<Score | null> {
-  const score = queryOne<Score>(
+  const score = await queryOne<Score>(
     'SELECT * FROM scores WHERE pool_id = ? AND bucket = ?',
     [poolId, bucket]
   );
@@ -60,5 +60,5 @@ export async function getScore(
 }
 
 export async function deletePoolScores(poolId: string): Promise<void> {
-  execute('DELETE FROM scores WHERE pool_id = ?', [poolId]);
+  await execute('DELETE FROM scores WHERE pool_id = ?', [poolId]);
 }
