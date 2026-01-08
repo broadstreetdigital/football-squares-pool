@@ -25,37 +25,42 @@ export interface Statement {
  * In local dev, falls back to file-based SQLite
  */
 export function getDatabase(): Database {
+  // Try multiple binding names (DB or DATABASE)
+  const bindingNames = ['DB', 'DATABASE'];
+
   // In Cloudflare Workers (Webflow Cloud), bindings are available via getBindingsProxy
   // @ts-ignore - Cloudflare platform global
   if (typeof platformBinding !== 'undefined') {
-    try {
-      // @ts-ignore
-      const db = platformBinding('DB');
-      if (db) return db as Database;
-    } catch (e) {
-      // Binding not available
+    for (const name of bindingNames) {
+      try {
+        // @ts-ignore
+        const db = platformBinding(name);
+        if (db) return db as Database;
+      } catch (e) {
+        // Try next binding name
+      }
     }
   }
 
-  // Try process.env.DB (Cloudflare Workers with OpenNext)
+  // Try process.env (Cloudflare Workers with OpenNext)
   // @ts-ignore - Cloudflare Workers runtime
-  if (typeof process !== 'undefined' && process.env?.DB) {
-    // @ts-ignore
-    return process.env.DB as Database;
+  if (typeof process !== 'undefined') {
+    for (const name of bindingNames) {
+      // @ts-ignore
+      if (process.env?.[name]) {
+        // @ts-ignore
+        return process.env[name] as Database;
+      }
+    }
   }
 
-  // Try global DB binding
-  // @ts-ignore - Cloudflare Workers runtime global
-  if (typeof DB !== 'undefined') {
-    // @ts-ignore
-    return DB as Database;
-  }
-
-  // Try accessing from globalThis
-  // @ts-ignore
-  if (typeof globalThis !== 'undefined' && globalThis.DB) {
-    // @ts-ignore
-    return globalThis.DB as Database;
+  // Try global bindings
+  for (const name of bindingNames) {
+    // @ts-ignore - Cloudflare Workers runtime global
+    if (typeof globalThis !== 'undefined' && globalThis[name]) {
+      // @ts-ignore
+      return globalThis[name] as Database;
+    }
   }
 
   // Local development fallback
