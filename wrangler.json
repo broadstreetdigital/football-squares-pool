@@ -3,7 +3,6 @@
     {
       "binding": "DB",
       "database_name": "football_squares_db",
-      "database_id": "placeholder",
       "migrations_dir": "./migrations"
     }
   ]
