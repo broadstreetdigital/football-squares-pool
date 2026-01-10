@@ -1,9 +1,0 @@
-{
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "football_squares_db",
-      "migrations_dir": "./migrations"
-    }
-  ]
-}

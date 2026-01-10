@@ -1,8 +1,8 @@
 # Football Squares Pool MVP
 
-A full-stack football squares pool application built for **Webflow Cloud** deployment. Create and manage squares pools for the Super Bowl, playoffs, or any football game with cryptographically secure randomization and instant winner calculations.
+A full-stack football squares pool application built for **Vercel** deployment. Create and manage squares pools for the Super Bowl, playoffs, or any football game with cryptographically secure randomization and instant winner calculations.
 
-![Football Squares Pool](https://img.shields.io/badge/Status-MVP-green) ![Next.js](https://img.shields.io/badge/Next.js-14-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Edge Runtime](https://img.shields.io/badge/Runtime-Edge-orange)
+![Football Squares Pool](https://img.shields.io/badge/Status-MVP-green) ![Next.js](https://img.shields.io/badge/Next.js-15-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue) ![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)
 
 ## Features
 
@@ -11,36 +11,37 @@ A full-stack football squares pool application built for **Webflow Cloud** deplo
 - **🏆 Automatic Winner Calculation**: Instant results for Q1, Q2, Q3, Q4, and Final
 - **👥 Public & Private Pools**: Share openly or use invite codes
 - **📱 Mobile Responsive**: Fully functional on phones, tablets, and desktops
-- **⚡ Edge-Native**: Built specifically for Webflow Cloud's edge runtime
+- **⚡ Serverless**: Optimized for Vercel's serverless functions
 - **🔒 Secure Authentication**: JWT-based sessions with httpOnly cookies
 - **🎨 Football-Themed UI**: Stadium lights, turf gradient, scoreboard styling
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: TailwindCSS with custom football theme
-- **Database**: SQLite (Webflow Cloud binding)
-- **Authentication**: JWT + bcrypt (edge-compatible)
+- **Database**: Turso (libSQL) - Edge-compatible SQLite
+- **Authentication**: JWT + bcrypt
 - **Validation**: Zod
 - **Testing**: Vitest
-- **Deployment**: Webflow Cloud (Cloudflare Workers edge runtime)
+- **Deployment**: Vercel
 
 ## Architecture
 
-This application is designed for **Webflow Cloud**, which provides:
+This application is designed for **Vercel**, which provides:
 
-- **Edge Runtime**: Cloudflare Workers-based execution
-- **SQLite Binding**: Co-located database with microsecond latency
+- **Serverless Functions**: Automatic scaling with zero configuration
+- **Edge Network**: Global CDN for fast content delivery
 - **GitHub Integration**: Automatic deployments on push
-- **Environment Variables**: Managed via Webflow dashboard
+- **Environment Variables**: Managed via Vercel dashboard
+- **Turso Database**: Edge-compatible SQLite database with global replication
 
-### Key Constraints
+### Key Features
 
-1. **Edge Runtime Only**: No Node.js APIs (fs, net, child_process)
-2. **Web APIs Required**: Use `fetch`, `Request`, `Response`, `crypto.subtle`
-3. **SQLite Only**: Webflow provides SQLite binding (no PostgreSQL/MySQL)
-4. **Path Handling**: Must respect `BASE_URL` and `ASSETS_PREFIX` env vars
+1. **Modern Next.js**: Uses App Router with Server Components
+2. **Turso Database**: libSQL (SQLite) with edge compatibility
+3. **Optimized Performance**: Image optimization, compression, and caching
+4. **Security**: Enhanced security headers and best practices
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture decisions.
 
@@ -125,42 +126,28 @@ football-squares-pool/
 
    Open [http://localhost:3000](http://localhost:3000)
 
-### Database in Local Dev
+### Database Setup with Turso
 
-**Note**: The database layer is designed for Webflow Cloud's SQLite binding. For local development, you have two options:
+This application uses **Turso** (libSQL) for the database, which works perfectly with Vercel:
 
-#### Option 1: Mock Database (Quick Start)
-- Modify `lib/db/client.ts` to use in-memory mock data
-- Suitable for UI development without full backend
-
-#### Option 2: Better-SQLite3 (Full Local Testing)
-```bash
-npm install better-sqlite3 @types/better-sqlite3
-```
-
-Update `lib/db/client.ts` to use better-sqlite3 when `DB` global is not available:
-
-```typescript
-import Database from 'better-sqlite3';
-
-let localDb: any;
-
-export function getDatabase(): Database {
-  if (typeof DB !== 'undefined') {
-    return DB; // Webflow Cloud binding
-  }
-
-  // Local dev fallback
-  if (!localDb) {
-    localDb = new Database('data/local.db');
-    // Initialize schema
-    const schema = fs.readFileSync('lib/db/schema.sql', 'utf-8');
-    localDb.exec(schema);
-  }
-
-  return localDb;
-}
-```
+1. **Create a Turso account**: Visit [turso.tech](https://turso.tech) and sign up
+2. **Create a database**:
+   ```bash
+   turso db create football-squares
+   ```
+3. **Get your database URL and auth token**:
+   ```bash
+   turso db show football-squares --url
+   turso db tokens create football-squares
+   ```
+4. **Add to your `.env.local`**:
+   ```env
+   TURSO_DATABASE_URL=libsql://your-database.turso.io
+   TURSO_AUTH_TOKEN=your-auth-token
+   ```
+5. **Initialize the schema**:
+   - Run your dev server: `npm run dev`
+   - Visit: `http://localhost:3000/api/admin/init-db`
 
 ### Running Tests
 
@@ -175,7 +162,7 @@ npm run test:ui
 npm run test:coverage
 ```
 
-## Deployment to Webflow Cloud
+## Deployment to Vercel
 
 ### Step 1: Prepare GitHub Repository
 
@@ -192,35 +179,51 @@ npm run test:coverage
    git push -u origin main
    ```
 
-   Ensure your default branch is `main` (Webflow auto-deploys from this).
+   Ensure your default branch is `main` (Vercel auto-deploys from this).
 
-### Step 2: Connect to Webflow Cloud
+### Step 2: Create Turso Database
 
-1. **Log in to Webflow**: Visit [webflow.com](https://webflow.com)
+1. **Install Turso CLI**:
+   ```bash
+   curl -sSfL https://get.tur.so/install.sh | bash
+   ```
 
-2. **Navigate to Sites**: Go to your dashboard → Sites
+2. **Create database**:
+   ```bash
+   turso db create football-squares
+   ```
 
-3. **Add New Site**:
-   - Click "Add Site" → "Import from Git"
-   - Select "GitHub" as your Git provider
-   - Authorize Webflow to access your GitHub account
+3. **Get credentials**:
+   ```bash
+   turso db show football-squares --url
+   turso db tokens create football-squares
+   ```
+
+   Save these for the next step!
+
+### Step 3: Deploy to Vercel
+
+1. **Visit Vercel**: Go to [vercel.com](https://vercel.com) and sign in with GitHub
+
+2. **Import Project**:
+   - Click "Add New..." → "Project"
    - Select your `football-squares-pool` repository
+   - Click "Import"
 
-4. **Configure Build Settings**:
-   Webflow should auto-detect Next.js. Verify:
-   - **Framework**: Next.js
+3. **Configure Project**:
+   Vercel should auto-detect Next.js. Defaults are correct:
+   - **Framework Preset**: Next.js
    - **Build Command**: `npm run build`
    - **Output Directory**: `.next`
    - **Install Command**: `npm install`
-   - **Node Version**: 18 or 20
+   - **Node Version**: 18.x or 20.x
 
-### Step 3: Set Environment Variables
-
-In Webflow project settings → Environment Variables:
-
-1. **Required**:
+4. **Set Environment Variables**:
+   Click "Environment Variables" and add:
    ```
    JWT_SECRET=<your-32-char-secret>
+   TURSO_DATABASE_URL=<from step 2>
+   TURSO_AUTH_TOKEN=<from step 2>
    NODE_ENV=production
    ```
 
@@ -229,31 +232,18 @@ In Webflow project settings → Environment Variables:
    openssl rand -base64 32
    ```
 
-2. **Automatic** (Webflow sets these):
-   - `BASE_URL`: Mount path for your app (e.g., `/app`)
-   - `ASSETS_PREFIX`: CDN prefix for static assets
+5. **Deploy**:
+   - Click "Deploy"
+   - Wait 2-3 minutes for build to complete
+   - Vercel will provide a URL: `https://your-project.vercel.app`
 
-### Step 4: Deploy
+### Step 4: Initialize Database
 
-1. **Trigger Deploy**:
-   - In Webflow dashboard, click "Deploy"
-   - Or push to `main` branch (triggers auto-deploy)
-
-2. **Monitor Build**:
-   - Watch build logs in real-time
-   - Build typically takes 2-5 minutes
-
-3. **Verify Deployment**:
-   - Once deployed, Webflow provides a URL: `https://your-site.webflow.io`
-   - Visit the URL
-
-### Step 5: Initialize Database
-
-**IMPORTANT**: On first deploy, you must initialize the database schema.
+**IMPORTANT**: On first deploy, initialize the database schema.
 
 Visit the admin endpoint:
 ```
-https://your-site.webflow.io/api/admin/init-db
+https://your-project.vercel.app/api/admin/init-db
 ```
 
 You should see:
@@ -291,65 +281,45 @@ You should see:
    - Enter scores for each quarter
    - Winners automatically calculated and highlighted
 
-## Webflow Cloud Specifics
+## Vercel Optimizations
 
-### BASE_URL and ASSETS_PREFIX
+### Performance Features
 
-Webflow Cloud may mount your app at a subpath (e.g., `/app`). The app handles this via:
+This application is optimized for Vercel with:
 
-**next.config.js**:
-```javascript
-module.exports = {
-  basePath: process.env.BASE_URL || '',
-  assetPrefix: process.env.ASSETS_PREFIX || '',
-};
-```
+- **Automatic Code Splitting**: Next.js optimizes bundle sizes
+- **Image Optimization**: Built-in image optimization with AVIF/WebP support
+- **Edge Caching**: Static assets cached globally via CDN
+- **Serverless Functions**: API routes auto-scale based on demand
+- **Compression**: Gzip/Brotli compression enabled
 
-**Usage in code**:
-- Links: Use Next.js `<Link>` component (automatically prefixes)
-- API calls: Use relative paths (`/api/pools`)
-- Avoid hardcoding absolute URLs
+### Database: Turso (libSQL)
 
-### Edge Runtime Limitations
-
-**Supported**:
-- Web APIs: `fetch`, `Request`, `Response`, `crypto`, `URL`
-- Pure JavaScript libraries
-- Edge-compatible packages (bcryptjs, zod)
-
-**Not Supported**:
-- Node.js APIs: `fs`, `path`, `net`, `child_process`
-- Node-specific database drivers (`pg`, `mysql2`, `node-sqlite3`)
-- Heavy native modules
-
-**All API routes include**:
-```typescript
-export const runtime = 'edge';
-```
-
-This ensures Webflow Cloud runs them in the edge environment.
-
-### Database: SQLite Binding
-
-Webflow Cloud provides a global `DB` object (SQLite binding):
+This app uses **Turso** for the database, which offers:
 
 ```typescript
-// In edge runtime
-const db = DB; // Global provided by Webflow Cloud
+// Database client usage
+import { query, execute } from '@/lib/db/client';
 
-// Usage
-const result = db.prepare('SELECT * FROM pools WHERE id = ?').bind(poolId).get();
+// Query data
+const pools = await query('SELECT * FROM pools WHERE owner_id = ?', [userId]);
+
+// Execute mutations
+await execute('INSERT INTO pools (id, name, owner_id) VALUES (?, ?, ?)',
+  [id, name, ownerId]);
 ```
 
-The database is:
-- **Durable**: Persists across deployments
-- **Fast**: Microsecond query latency (co-located with compute)
-- **Scalable**: Suitable for thousands of pools
+**Benefits**:
+- **Edge-Compatible**: Works with Vercel's serverless functions
+- **Global Distribution**: Replicate data to multiple regions
+- **Low Latency**: Fast queries from anywhere in the world
+- **Generous Free Tier**: Perfect for MVP and production
+- **SQLite Compatibility**: Standard SQLite syntax
 
-**Backup Strategy**:
-- Implement periodic exports via API route
-- Store exports in Cloudflare R2 or external storage
-- Webflow Cloud SQLite is durable but not automatically backed up
+**Backup & Monitoring**:
+- Turso provides automatic backups
+- View analytics in Turso dashboard
+- Monitor query performance and database size
 
 ## API Documentation
 
@@ -525,7 +495,7 @@ describe('POST /api/pools', () => {
 
 ## Troubleshooting
 
-### Build Fails on Webflow Cloud
+### Build Fails on Vercel
 
 **Error**: `Module not found` or `Can't resolve`
 
@@ -536,22 +506,23 @@ describe('POST /api/pools', () => {
 
 ### Database Not Found
 
-**Error**: `Database not available`
+**Error**: `Database not available` or `TURSO_DATABASE_URL is required`
 
 **Solution**:
 - Ensure you've visited `/api/admin/init-db` after first deploy
-- Check Webflow Cloud provides `DB` global binding
-- Verify you're using edge runtime (`export const runtime = 'edge'`)
+- Verify `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` are set in Vercel environment variables
+- Check Turso database is created and accessible
+- Redeploy after adding environment variables
 
 ### Authentication Not Working
 
 **Error**: Redirects to login repeatedly
 
 **Solution**:
-- Verify `JWT_SECRET` is set in Webflow environment variables
+- Verify `JWT_SECRET` is set in Vercel environment variables
 - Check JWT_SECRET is at least 32 characters
 - Clear browser cookies
-- Check `secure` cookie setting matches HTTPS status
+- Redeploy after adding environment variables
 
 ### Squares Board Not Interactive
 
@@ -573,11 +544,12 @@ describe('POST /api/pools', () => {
 
 ## Performance
 
-- **Edge Distribution**: Low latency worldwide
-- **SQLite Co-location**: Microsecond database access
+- **Global CDN**: Vercel's edge network for fast content delivery
+- **Turso Edge Database**: Low latency database queries worldwide
 - **Server Components**: Minimal client JavaScript
-- **Optimized Images**: Next.js Image component
+- **Optimized Images**: Next.js Image component with AVIF/WebP
 - **Route Prefetching**: Automatic via Next.js Link
+- **Automatic Caching**: Smart caching for optimal performance
 
 ## Limitations & Future Enhancements
 
@@ -621,7 +593,8 @@ For issues, questions, or feedback:
 
 ## Acknowledgments
 
-- Built for **Webflow Cloud** edge runtime
+- Built for **Vercel** serverless platform
+- Database powered by **Turso** (libSQL)
 - Inspired by traditional paper football squares pools
 - Designed for ease of use on game day
 
@@ -629,4 +602,4 @@ For issues, questions, or feedback:
 
 **Ready for Game Day!** 🏈
 
-Deploy this app to Webflow Cloud and never run a paper squares pool again.
+Deploy this app to Vercel and never run a paper squares pool again.
