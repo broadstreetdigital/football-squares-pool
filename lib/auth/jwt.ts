@@ -10,7 +10,23 @@ export interface JWTPayload {
   exp: number; // expiry
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production';
+// Validate JWT_SECRET at module load time
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error(
+    'JWT_SECRET environment variable is required. ' +
+    'Generate a secure secret with: openssl rand -base64 32'
+  );
+}
+
+if (JWT_SECRET.length < 32) {
+  throw new Error(
+    'JWT_SECRET must be at least 32 characters long for security. ' +
+    'Current length: ' + JWT_SECRET.length
+  );
+}
+
 const JWT_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
 
 /**

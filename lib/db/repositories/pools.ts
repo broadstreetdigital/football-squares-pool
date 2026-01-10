@@ -64,17 +64,21 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
       ]
     );
 
-    // Initialize 100 squares
-    const squareValues: any[] = [];
+    // Initialize 100 squares with parameterized queries
+    const squareInserts: string[] = [];
+    const squareParams: any[] = [];
+
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 10; col++) {
-        squareValues.push(`('${id}', ${row}, ${col}, NULL, NULL, NULL, NULL)`);
+        squareInserts.push('(?, ?, ?, NULL, NULL, NULL, NULL)');
+        squareParams.push(id, row, col);
       }
     }
 
     await execute(
       `INSERT INTO squares (pool_id, row, col, claimed_by_user_id, claimed_display_name, claimed_email, claimed_at)
-       VALUES ${squareValues.join(', ')}`
+       VALUES ${squareInserts.join(', ')}`,
+      squareParams
     );
 
     return await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id])!;

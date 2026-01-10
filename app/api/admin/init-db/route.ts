@@ -2,6 +2,9 @@
  * POST /api/admin/init-db
  * Initialize database schema
  * Should be called once on first deployment
+ *
+ * SECURITY: This endpoint is disabled in production for security.
+ * Use Turso CLI or database migrations instead.
  */
 
 import { NextResponse } from 'next/server';
@@ -103,6 +106,18 @@ CREATE INDEX IF NOT EXISTS idx_event_log_type ON event_log(type, created_at DESC
 `;
 
 async function initDb() {
+  // SECURITY: Disable in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Database initialization is disabled in production',
+        message: 'Use Turso CLI for production database management: turso db shell <database-name>',
+      },
+      { status: 403 }
+    );
+  }
+
   try {
     initializeSchema(SCHEMA_SQL);
 
@@ -123,10 +138,7 @@ async function initDb() {
   }
 }
 
-export async function GET() {
-  return initDb();
-}
-
+// Remove GET method - only POST should be allowed for state-changing operations
 export async function POST() {
   return initDb();
 }
