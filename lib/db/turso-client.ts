@@ -77,7 +77,12 @@ export async function transaction<T>(fn: () => Promise<T>): Promise<T> {
     await client.execute('COMMIT');
     return result;
   } catch (error) {
-    await client.execute('ROLLBACK');
+    try {
+      await client.execute('ROLLBACK');
+    } catch (rollbackError) {
+      // Ignore rollback errors (transaction might already be rolled back)
+      console.error('Rollback error (ignored):', rollbackError);
+    }
     throw error;
   }
 }

@@ -2,8 +2,8 @@
  * Pool repository - database operations for pools
  */
 
-import { query, queryOne, execute, transaction } from '../client';
-import { Pool, PoolWithOwner, Square } from '../types';
+import { query, queryOne, execute } from '../client';
+import { Pool, PoolWithOwner } from '../types';
 import { generateId } from '@/lib/utils/id';
 
 export interface CreatePoolData {
@@ -37,56 +37,53 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
   const id = generateId();
   const createdAt = Date.now();
 
-  const pool = await transaction(async () => {
-    // Create pool
-    await execute(
-      `INSERT INTO pools (
-        id, owner_id, name, game_name, game_time, entry_fee_info,
-        square_price, max_squares_per_user, visibility, invite_code_hash,
-        status, rules, home_team, away_team, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        id,
-        data.owner_id,
-        data.name,
-        data.game_name,
-        data.game_time,
-        data.entry_fee_info || null,
-        data.square_price,
-        data.max_squares_per_user,
-        data.visibility,
-        data.invite_code_hash || null,
-        'open',
-        data.rules || null,
-        data.home_team,
-        data.away_team,
-        createdAt,
-      ]
-    );
+  // Create pool
+  await execute(
+    `INSERT INTO pools (
+      id, owner_id, name, game_name, game_time, entry_fee_info,
+      square_price, max_squares_per_user, visibility, invite_code_hash,
+      status, rules, home_team, away_team, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      id,
+      data.owner_id,
+      data.name,
+      data.game_name,
+      data.game_time,
+      data.entry_fee_info || null,
+      data.square_price,
+      data.max_squares_per_user,
+      data.visibility,
+      data.invite_code_hash || null,
+      'open',
+      data.rules || null,
+      data.home_team,
+      data.away_team,
+      createdAt,
+    ]
+  );
 
-    // Initialize 100 squares with parameterized queries
-    const squareInserts: string[] = [];
-    const squareParams: any[] = [];
+  // Initialize 100 squares with parameterized queries
+  const squareInserts: string[] = [];
+  const squareParams: any[] = [];
 
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 10; col++) {
-        squareInserts.push('(?, ?, ?, NULL, NULL, NULL, NULL)');
-        squareParams.push(id, row, col);
-      }
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      squareInserts.push('(?, ?, ?, NULL, NULL, NULL, NULL)');
+      squareParams.push(id, row, col);
     }
+  }
 
-    await execute(
-      `INSERT INTO squares (pool_id, row, col, claimed_by_user_id, claimed_display_name, claimed_email, claimed_at)
-       VALUES ${squareInserts.join(', ')}`,
-      squareParams
-    );
+  await execute(
+    `INSERT INTO squares (pool_id, row, col, claimed_by_user_id, claimed_display_name, claimed_email, claimed_at)
+     VALUES ${squareInserts.join(', ')}`,
+    squareParams
+  );
 
-    const createdPool = await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id]);
-    if (!createdPool) {
-      throw new Error('Failed to retrieve created pool');
-    }
-    return createdPool;
-  });
+  const pool = await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id]);
+  if (!pool) {
+    throw new Error('Failed to retrieve created pool');
+  }
 
   return pool;
 }
