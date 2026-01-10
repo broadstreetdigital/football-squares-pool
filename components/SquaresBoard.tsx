@@ -119,8 +119,9 @@ export function SquaresBoard({
       )}
 
       {/* Board Container */}
-      <div className="w-full flex justify-center overflow-x-auto">
-        <div className="inline-block">
+      <div className="w-full overflow-x-auto -mx-2 px-2">
+        <div className="inline-block min-w-full flex justify-center">
+          <div className="inline-block">
           {/* X Axis (Away Team) */}
           {xDigits && (
             <div className="flex">
@@ -161,6 +162,7 @@ export function SquaresBoard({
               ))}
             </div>
           ))}
+          </div>
         </div>
       </div>
 
