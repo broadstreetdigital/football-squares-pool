@@ -44,6 +44,28 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
     }
   };
 
+  const handleUnlock = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/pools/${poolId}/unlock`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to unlock pool');
+      }
+
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleRandomize = async () => {
     setLoading(true);
     setError(null);
@@ -102,13 +124,22 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
             )}
 
             {status === 'locked' && (
-              <button
-                onClick={handleRandomize}
-                disabled={loading}
-                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Randomizing...' : 'Randomize Digits'}
-              </button>
+              <>
+                <button
+                  onClick={handleUnlock}
+                  disabled={loading}
+                  className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Unlocking...' : 'Unlock Board'}
+                </button>
+                <button
+                  onClick={handleRandomize}
+                  disabled={loading}
+                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Randomizing...' : 'Randomize Digits'}
+                </button>
+              </>
             )}
 
             {(status === 'numbered' || status === 'completed') && (
