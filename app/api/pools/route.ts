@@ -53,11 +53,15 @@ export async function POST(request: NextRequest) {
       away_team: data.away_team,
     });
 
-    // Log event
-    await logEvent(pool.id, session.user.id, 'pool_created', {
-      pool_name: pool.name,
-      game_name: pool.game_name,
-    });
+    // Log event (non-critical, don't fail if this errors)
+    try {
+      await logEvent(pool.id, session.user.id, 'pool_created', {
+        pool_name: pool.name,
+        game_name: pool.game_name,
+      });
+    } catch (logError) {
+      console.error('Failed to log event (non-critical):', logError);
+    }
 
     return NextResponse.json(
       {
