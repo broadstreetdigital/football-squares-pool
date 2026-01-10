@@ -21,6 +21,7 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
   const [error, setError] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showRandomizeConfirm, setShowRandomizeConfirm] = useState(false);
 
   const handleLock = async () => {
     setLoading(true);
@@ -69,6 +70,7 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
   const handleRandomize = async () => {
     setLoading(true);
     setError(null);
+    setShowRandomizeConfirm(false);
 
     try {
       const res = await fetch(`/api/pools/${poolId}/randomize`, {
@@ -78,6 +80,28 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
       if (!res.ok) {
         const { error } = await res.json();
         throw new Error(error || 'Failed to randomize');
+      }
+
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUnrandomize = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/pools/${poolId}/unrandomize`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to un-randomize pool');
       }
 
       router.refresh();
@@ -133,16 +157,32 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
                   {loading ? 'Unlocking...' : 'Unlock Board'}
                 </button>
                 <button
-                  onClick={handleRandomize}
+                  onClick={() => setShowRandomizeConfirm(true)}
                   disabled={loading}
                   className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Randomizing...' : 'Randomize Digits'}
+                  Randomize Digits
                 </button>
               </>
             )}
 
-            {(status === 'numbered' || status === 'completed') && (
+            {status === 'numbered' && (
+              <>
+                <button
+                  onClick={handleUnrandomize}
+                  disabled={loading}
+                  className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Removing randomization...' : 'Un-randomize'}
+                </button>
+                <span className="text-green-400 text-sm flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-400" />
+                  Board is ready - enter scores below
+                </span>
+              </>
+            )}
+
+            {status === 'completed' && (
               <span className="text-green-400 text-sm flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-green-400" />
                 Board is ready - enter scores below
@@ -185,6 +225,36 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
           )}
         </div>
       </div>
+
+      {/* Randomize Confirmation Dialog */}
+      {showRandomizeConfirm && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
+            <h3 className="font-display text-2xl text-white mb-4">
+              Randomize Digits?
+            </h3>
+            <p className="text-white/90 mb-6">
+              Are you sure you want to randomize the digits? Once the digits have been randomized, the board will be ready and numbers will be assigned to each row and column.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowRandomizeConfirm(false)}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRandomize}
+                className="btn-primary"
+                disabled={loading}
+              >
+                {loading ? 'Randomizing...' : 'Yes, Randomize'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
