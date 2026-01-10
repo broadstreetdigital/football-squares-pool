@@ -228,8 +228,8 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
 
       {/* Randomize Confirmation Dialog */}
       {showRandomizeConfirm && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl relative z-[101]">
             <h3 className="font-display text-2xl text-white mb-4">
               Randomize Digits?
             </h3>

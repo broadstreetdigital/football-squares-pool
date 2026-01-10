@@ -174,7 +174,11 @@ export default async function PoolDetailPage({ params }: PageProps) {
         </div>
 
         {/* Owner Controls */}
-        {isOwner && <OwnerControls poolId={pool.id} status={pool.status} visibility={pool.visibility} inviteCode={pool.invite_code} />}
+        {isOwner && (
+          <div className="mb-8">
+            <OwnerControls poolId={pool.id} status={pool.status} visibility={pool.visibility} inviteCode={pool.invite_code} />
+          </div>
+        )}
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

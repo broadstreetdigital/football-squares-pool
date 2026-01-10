@@ -119,8 +119,8 @@ export function SquaresBoard({
       )}
 
       {/* Board Container */}
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-full">
+      <div className="w-full flex justify-center overflow-x-auto">
+        <div className="inline-block">
           {/* X Axis (Away Team) */}
           {xDigits && (
             <div className="flex">
@@ -128,7 +128,7 @@ export function SquaresBoard({
               {xDigits.map((digit, i) => (
                 <div
                   key={i}
-                  className="w-16 h-10 flex items-center justify-center font-display text-xl text-stadium-gold"
+                  className="w-14 sm:w-16 md:w-20 lg:w-24 h-10 flex items-center justify-center font-display text-lg sm:text-xl text-stadium-gold"
                 >
                   {digit}
                 </div>
@@ -141,7 +141,7 @@ export function SquaresBoard({
             <div key={row} className="flex">
               {/* Y Axis (Home Team) */}
               {yDigits && (
-                <div className="w-10 h-16 flex items-center justify-center font-display text-xl text-stadium-gold">
+                <div className="w-10 h-14 sm:h-16 md:h-20 lg:h-24 flex items-center justify-center font-display text-lg sm:text-xl text-stadium-gold">
                   {yDigits[row]}
                 </div>
               )}
@@ -150,11 +150,11 @@ export function SquaresBoard({
               {Array.from({ length: 10 }).map((_, col) => (
                 <button
                   key={col}
-                  className={cn(getSquareClass(row, col), 'w-16 h-16')}
+                  className={cn(getSquareClass(row, col), 'w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24')}
                   onClick={() => toggleSquare(row, col)}
                   disabled={!canClaim || claiming}
                 >
-                  <span className="truncate px-1">
+                  <span className="truncate px-1 text-xs sm:text-sm">
                     {getSquareContent(row, col)}
                   </span>
                 </button>
