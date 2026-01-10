@@ -15,6 +15,7 @@ import { SquaresBoard } from '@/components/SquaresBoard';
 import { ScoreEntryForm } from '@/components/ScoreEntryForm';
 import { WinnersList } from '@/components/WinnersList';
 import { OwnerControls } from '@/components/OwnerControls';
+import { InviteCodeForm } from '@/components/InviteCodeForm';
 import { calculateAllWinners } from '@/lib/game/winners';
 
 interface PageProps {
@@ -32,12 +33,16 @@ export default async function PoolDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Check visibility
-  if (pool.visibility === 'private' && pool.owner_id !== session?.user.id) {
-    redirect('/login');
+  // Check visibility - redirect to login if not authenticated for private pools
+  if (pool.visibility === 'private' && !session) {
+    redirect(`/login?redirect=/pool/${id}`);
   }
 
   const isOwner = session?.user.id === pool.owner_id;
+
+  // If private pool and not the owner, show invite code form
+  const needsInviteCode = pool.visibility === 'private' && !isOwner;
+
   const canClaim = pool.status === 'open' && !!session;
 
   // Fetch board data
@@ -109,8 +114,13 @@ export default async function PoolDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Pool Header */}
-        <div className="stadium-card p-8 mb-8">
+        {/* Show invite code form if user needs access */}
+        {needsInviteCode ? (
+          <InviteCodeForm poolId={pool.id} poolName={pool.name} />
+        ) : (
+          <>
+            {/* Pool Header */}
+            <div className="stadium-card p-8 mb-8">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -252,6 +262,8 @@ export default async function PoolDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+          </>
+        )}
       </main>
     </div>
   );
