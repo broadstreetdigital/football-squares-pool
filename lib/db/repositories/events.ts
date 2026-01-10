@@ -12,6 +12,7 @@ export type EventType =
   | 'pool_locked'
   | 'pool_unlocked'
   | 'pool_randomized'
+  | 'pool_unrandomized'
   | 'squares_claimed'
   | 'square_unclaimed'
   | 'score_updated'
