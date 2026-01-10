@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       square_price: data.square_price,
       max_squares_per_user: data.max_squares_per_user,
       visibility: data.visibility,
+      invite_code: inviteCode,
       invite_code_hash: inviteCodeHash,
       rules: data.rules,
       home_team: data.home_team,

@@ -11,12 +11,16 @@ import { useRouter } from 'next/navigation';
 interface OwnerControlsProps {
   poolId: string;
   status: 'open' | 'locked' | 'numbered' | 'completed';
+  visibility: 'public' | 'private';
+  inviteCode: string | null;
 }
 
-export function OwnerControls({ poolId, status }: OwnerControlsProps) {
+export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerControlsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCode, setShowCode] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleLock = async () => {
     setLoading(true);
@@ -62,6 +66,14 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
     }
   };
 
+  const copyInviteCode = async () => {
+    if (inviteCode) {
+      await navigator.clipboard.writeText(inviteCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div className="stadium-card p-6">
       <h2 className="font-display text-2xl text-white mb-4">
@@ -71,6 +83,40 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
       {error && (
         <div className="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg mb-4">
           {error}
+        </div>
+      )}
+
+      {/* Private Pool Invite Code */}
+      {visibility === 'private' && inviteCode && (
+        <div className="mb-4 p-4 bg-white/5 rounded-lg border border-white/10">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-white/80 text-sm font-medium">Invite Code</span>
+            <button
+              onClick={() => setShowCode(!showCode)}
+              className="text-stadium-gold hover:text-stadium-gold/80 text-sm"
+            >
+              {showCode ? 'Hide' : 'Show'}
+            </button>
+          </div>
+
+          {showCode ? (
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-black/30 px-4 py-2 rounded text-stadium-gold font-mono text-lg tracking-wider">
+                {inviteCode}
+              </code>
+              <button
+                onClick={copyInviteCode}
+                className="btn-secondary py-2 px-3"
+                title="Copy to clipboard"
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          ) : (
+            <p className="text-white/50 text-sm">
+              Click "Show" to reveal the invite code for this private pool.
+            </p>
+          )}
         </div>
       )}
 

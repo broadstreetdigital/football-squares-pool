@@ -15,6 +15,7 @@ export interface CreatePoolData {
   square_price: number;
   max_squares_per_user: number;
   visibility: 'public' | 'private';
+  invite_code?: string;
   invite_code_hash?: string;
   rules?: string;
   home_team: string;
@@ -41,9 +42,9 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
   await execute(
     `INSERT INTO pools (
       id, owner_id, name, game_name, game_time, entry_fee_info,
-      square_price, max_squares_per_user, visibility, invite_code_hash,
+      square_price, max_squares_per_user, visibility, invite_code, invite_code_hash,
       status, rules, home_team, away_team, created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
       data.owner_id,
@@ -54,6 +55,7 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
       data.square_price,
       data.max_squares_per_user,
       data.visibility,
+      data.invite_code || null,
       data.invite_code_hash || null,
       'open',
       data.rules || null,

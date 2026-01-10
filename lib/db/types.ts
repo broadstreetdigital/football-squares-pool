@@ -22,6 +22,7 @@ export interface Pool {
   square_price: number;
   max_squares_per_user: number;
   visibility: 'public' | 'private';
+  invite_code: string | null;
   invite_code_hash: string | null;
   status: 'open' | 'locked' | 'numbered' | 'completed';
   rules: string | null;

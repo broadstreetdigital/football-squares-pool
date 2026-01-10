@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS pools (
   square_price REAL NOT NULL DEFAULT 0,
   max_squares_per_user INTEGER NOT NULL DEFAULT 10,
   visibility TEXT NOT NULL DEFAULT 'public' CHECK(visibility IN ('public', 'private')),
+  invite_code TEXT,
   invite_code_hash TEXT,
   status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open', 'locked', 'numbered', 'completed')),
   rules TEXT,
