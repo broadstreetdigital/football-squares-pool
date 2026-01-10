@@ -86,67 +86,73 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
         </div>
       )}
 
-      {/* Private Pool Invite Code */}
-      {visibility === 'private' && inviteCode && (
-        <div className="mb-4 p-4 bg-white/5 rounded-lg border border-white/10">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-white/80 text-sm font-medium">Invite Code</span>
-            <button
-              onClick={() => setShowCode(!showCode)}
-              className="text-stadium-gold hover:text-stadium-gold/80 text-sm"
-            >
-              {showCode ? 'Hide' : 'Show'}
-            </button>
+      <div className="space-y-4">
+        {/* Actions and Invite Code Row */}
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Board Actions */}
+          <div className="flex-1 flex items-center gap-4">
+            {status === 'open' && (
+              <button
+                onClick={handleLock}
+                disabled={loading}
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Locking...' : 'Lock Board'}
+              </button>
+            )}
+
+            {status === 'locked' && (
+              <button
+                onClick={handleRandomize}
+                disabled={loading}
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Randomizing...' : 'Randomize Digits'}
+              </button>
+            )}
+
+            {(status === 'numbered' || status === 'completed') && (
+              <span className="text-green-400 text-sm flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-400" />
+                Board is ready - enter scores below
+              </span>
+            )}
           </div>
 
-          {showCode ? (
-            <div className="flex items-center gap-2">
-              <code className="flex-1 bg-black/30 px-4 py-2 rounded text-stadium-gold font-mono text-lg tracking-wider">
-                {inviteCode}
-              </code>
-              <button
-                onClick={copyInviteCode}
-                className="btn-secondary py-2 px-3"
-                title="Copy to clipboard"
-              >
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
+          {/* Invite Code Section */}
+          {visibility === 'private' && inviteCode && (
+            <div className="lg:w-96 p-4 bg-white/5 rounded-lg border border-white/10">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-white/80 text-sm font-medium">Invite Code</span>
+                <button
+                  onClick={() => setShowCode(!showCode)}
+                  className="text-stadium-gold hover:text-stadium-gold/80 text-sm font-medium"
+                >
+                  {showCode ? 'Hide' : 'Show'}
+                </button>
+              </div>
+
+              {showCode ? (
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 bg-black/30 px-3 py-2 rounded text-stadium-gold font-mono text-base tracking-wider">
+                    {inviteCode}
+                  </code>
+                  <button
+                    onClick={copyInviteCode}
+                    className="btn-secondary py-2 px-3 text-sm"
+                    title="Copy to clipboard"
+                  >
+                    {copied ? '✓' : 'Copy'}
+                  </button>
+                </div>
+              ) : (
+                <p className="text-white/50 text-xs">
+                  Click "Show" to reveal invite code
+                </p>
+              )}
             </div>
-          ) : (
-            <p className="text-white/50 text-sm">
-              Click "Show" to reveal the invite code for this private pool.
-            </p>
           )}
         </div>
-      )}
-
-      <div className="flex flex-wrap gap-4">
-        {status === 'open' && (
-          <button
-            onClick={handleLock}
-            disabled={loading}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Locking...' : 'Lock Board'}
-          </button>
-        )}
-
-        {status === 'locked' && (
-          <button
-            onClick={handleRandomize}
-            disabled={loading}
-            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Randomizing...' : 'Randomize Digits'}
-          </button>
-        )}
-
-        {(status === 'numbered' || status === 'completed') && (
-          <span className="text-green-400 text-sm flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-400" />
-            Board is ready - enter scores below
-          </span>
-        )}
       </div>
     </div>
   );
