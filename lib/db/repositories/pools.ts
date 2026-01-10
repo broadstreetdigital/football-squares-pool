@@ -81,7 +81,11 @@ export async function createPool(data: CreatePoolData): Promise<Pool> {
       squareParams
     );
 
-    return await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id])!;
+    const createdPool = await queryOne<Pool>('SELECT * FROM pools WHERE id = ?', [id]);
+    if (!createdPool) {
+      throw new Error('Failed to retrieve created pool');
+    }
+    return createdPool;
   });
 
   return pool;
