@@ -26,9 +26,9 @@ export function CreatePoolForm() {
     const gameTime = formData.get('gameTime') as string;
     const gameDateTime = new Date(`${gameDate}T${gameTime}`);
 
-    const inviteCode = formData.get('invite_code') as string;
-    const entryFeeInfo = formData.get('entry_fee_info') as string;
-    const rules = formData.get('rules') as string;
+    const inviteCode = (formData.get('invite_code') as string)?.trim();
+    const entryFeeInfo = (formData.get('entry_fee_info') as string)?.trim();
+    const rules = (formData.get('rules') as string)?.trim();
 
     const data = {
       name: formData.get('name') as string,
@@ -42,9 +42,9 @@ export function CreatePoolForm() {
         10
       ),
       visibility,
-      entry_fee_info: entryFeeInfo || undefined,
-      rules: rules || undefined,
-      invite_code: visibility === 'private' && inviteCode ? inviteCode : undefined,
+      entry_fee_info: entryFeeInfo && entryFeeInfo.length > 0 ? entryFeeInfo : undefined,
+      rules: rules && rules.length > 0 ? rules : undefined,
+      invite_code: visibility === 'private' && inviteCode && inviteCode.length > 0 ? inviteCode : undefined,
     };
 
     try {
