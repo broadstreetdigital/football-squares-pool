@@ -31,6 +31,12 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
     setMounted(true);
   }, []);
 
+  // Update local state when props change (after refresh)
+  useEffect(() => {
+    setNewSquarePrice(squarePrice.toString());
+    setNewMaxSquares(maxSquaresPerUser.toString());
+  }, [squarePrice, maxSquaresPerUser]);
+
   const handleLock = async () => {
     setLoading(true);
     setError(null);
