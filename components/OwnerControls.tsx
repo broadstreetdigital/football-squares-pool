@@ -22,6 +22,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
   const [error, setError] = useState<string | null>(null);
   const [showRandomizeConfirm, setShowRandomizeConfirm] = useState(false);
   const [showUnrandomizeConfirm, setShowUnrandomizeConfirm] = useState(false);
+  const [showClearBoardConfirm, setShowClearBoardConfirm] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
   const [newSquarePrice, setNewSquarePrice] = useState(squarePrice.toString());
   const [newMaxSquares, setNewMaxSquares] = useState(maxSquaresPerUser.toString());
@@ -168,6 +169,29 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
     }
   };
 
+  const handleClearBoard = async () => {
+    setLoading(true);
+    setError(null);
+    setShowClearBoardConfirm(false);
+
+    try {
+      const res = await fetch(`/api/pools/${poolId}/clear`, {
+        method: 'POST',
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to clear board');
+      }
+
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="stadium-card p-6">
       <h2 className="font-display text-2xl text-white mb-4">
@@ -242,6 +266,15 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
             className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Pool Settings
+          </button>
+
+          {/* Clear Board Button - Available in all states */}
+          <button
+            onClick={() => setShowClearBoardConfirm(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 hover:bg-red-500/30 border-red-500/50"
+          >
+            Clear Board
           </button>
         </div>
       </div>
@@ -367,6 +400,37 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Clear Board Confirmation Dialog */}
+      {mounted && showClearBoardConfirm && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-red-500 rounded-lg p-6 max-w-md w-full shadow-2xl">
+            <h3 className="font-display text-2xl text-white mb-4">
+              Clear Board?
+            </h3>
+            <p className="text-white/90 mb-6">
+              Are you sure you want to clear the board? This will remove ALL claimed squares from all users. This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowClearBoardConfirm(false)}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleClearBoard}
+                className="btn-primary bg-red-500/80 hover:bg-red-500 border-red-500"
+                disabled={loading}
+              >
+                {loading ? 'Clearing...' : 'Yes, Clear Board'}
               </button>
             </div>
           </div>
