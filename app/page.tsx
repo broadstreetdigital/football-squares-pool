@@ -85,8 +85,8 @@ export default async function HomePage() {
             <Link href={session ? '/pool/new' : '/register'} className="btn-primary text-lg">
               Create a Pool
             </Link>
-            <Link href="#how-it-works" className="btn-secondary text-lg">
-              How It Works
+            <Link href="/demo" className="btn-secondary text-lg">
+              View a Demo
             </Link>
           </div>
         </div>
