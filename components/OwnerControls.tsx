@@ -5,8 +5,9 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 
 interface OwnerControlsProps {
   poolId: string;
@@ -22,6 +23,11 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
   const [showCode, setShowCode] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showRandomizeConfirm, setShowRandomizeConfirm] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLock = async () => {
     setLoading(true);
@@ -227,9 +233,9 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
       </div>
 
       {/* Randomize Confirmation Dialog */}
-      {showRandomizeConfirm && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 overflow-y-auto" style={{ zIndex: 9999 }}>
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl my-auto" style={{ zIndex: 10000 }}>
+      {mounted && showRandomizeConfirm && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
             <h3 className="font-display text-2xl text-white mb-4">
               Randomize Digits?
             </h3>
@@ -253,7 +259,8 @@ export function OwnerControls({ poolId, status, visibility, inviteCode }: OwnerC
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
