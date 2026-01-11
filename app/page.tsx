@@ -13,6 +13,7 @@ export default async function HomePage() {
       {/* Stadium lights effect */}
       <div className="fixed inset-0 bg-stadium-lights pointer-events-none" />
 
+
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
