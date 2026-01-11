@@ -22,8 +22,8 @@ export default async function NewPoolPage() {
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6 border-b border-white/10">
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-display text-3xl text-stadium-gold">
-            FOOTBALL SQUARES
+          <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-tight">
+            FOOTBALL<br className="sm:hidden" /> SQUARES POOL
           </Link>
 
           <div className="flex items-center gap-4">

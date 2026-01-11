@@ -47,6 +47,27 @@ const config: Config = {
         )`,
         'turf-gradient': 'linear-gradient(135deg, #1a4d2e 0%, #0f3820 100%)',
         'stadium-lights': 'radial-gradient(ellipse at top, rgba(251, 191, 36, 0.15) 0%, transparent 60%)',
+        'football-field': `
+          linear-gradient(135deg, #1a5d32 0%, #0f3820 100%),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 90px,
+            rgba(255, 255, 255, 0.15) 90px,
+            rgba(255, 255, 255, 0.15) 95px,
+            transparent 95px,
+            transparent 100px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 45px,
+            rgba(255, 255, 255, 0.08) 45px,
+            rgba(255, 255, 255, 0.08) 47px,
+            transparent 47px,
+            transparent 100px
+          )
+        `,
       },
       boxShadow: {
         'gold-glow': '0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.3)',

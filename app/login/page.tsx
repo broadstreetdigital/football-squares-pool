@@ -21,8 +21,8 @@ export default async function LoginPage() {
 
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6">
-        <Link href="/" className="font-display text-3xl text-stadium-gold">
-          FOOTBALL SQUARES
+        <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-tight">
+          FOOTBALL<br className="sm:hidden" /> SQUARES POOL
         </Link>
       </nav>
 

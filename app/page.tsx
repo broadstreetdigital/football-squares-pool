@@ -9,35 +9,35 @@ export default async function HomePage() {
   const session = await getSession();
 
   return (
-    <div className="min-h-screen bg-turf-gradient bg-yard-pattern">
+    <div className="min-h-screen bg-football-field">
       {/* Stadium lights effect */}
       <div className="fixed inset-0 bg-stadium-lights pointer-events-none" />
 
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold">
-          FOOTBALL SQUARES POOL
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold leading-tight">
+            FOOTBALL<br className="sm:hidden" /> SQUARES POOL
           </h1>
 
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-2 sm:gap-4">
             {session ? (
               <>
-                <Link href="/dashboard" className="btn-secondary">
+                <Link href="/dashboard" className="btn-secondary text-sm sm:text-base">
                   Dashboard
                 </Link>
                 <form action="/api/auth/logout" method="POST">
-                  <button type="submit" className="btn-secondary">
+                  <button type="submit" className="btn-secondary text-sm sm:text-base">
                     Logout
                   </button>
                 </form>
               </>
             ) : (
               <>
-                <Link href="/login" className="btn-secondary">
+                <Link href="/login" className="btn-secondary text-sm sm:text-base">
                   Login
                 </Link>
-                <Link href="/register" className="btn-primary">
+                <Link href="/register" className="btn-primary text-sm sm:text-base">
                   Sign Up
                 </Link>
               </>
