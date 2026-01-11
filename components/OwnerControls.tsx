@@ -12,14 +12,19 @@ import { createPortal } from 'react-dom';
 interface OwnerControlsProps {
   poolId: string;
   status: 'open' | 'locked' | 'numbered' | 'completed';
+  squarePrice: number;
+  maxSquaresPerUser: number;
 }
 
-export function OwnerControls({ poolId, status }: OwnerControlsProps) {
+export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }: OwnerControlsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showRandomizeConfirm, setShowRandomizeConfirm] = useState(false);
   const [showUnrandomizeConfirm, setShowUnrandomizeConfirm] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [newSquarePrice, setNewSquarePrice] = useState(squarePrice.toString());
+  const [newMaxSquares, setNewMaxSquares] = useState(maxSquaresPerUser.toString());
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -116,6 +121,47 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
     }
   };
 
+  const handleUpdateSettings = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const price = parseFloat(newSquarePrice);
+      const max = parseInt(newMaxSquares);
+
+      if (isNaN(price) || price < 0) {
+        throw new Error('Invalid square price');
+      }
+
+      if (isNaN(max) || max < 1 || max > 100) {
+        throw new Error('Max squares must be between 1 and 100');
+      }
+
+      const res = await fetch(`/api/pools/${poolId}/settings`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          square_price: price,
+          max_squares_per_user: max,
+        }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to update settings');
+      }
+
+      setShowSettingsDialog(false);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="stadium-card p-6">
       <h2 className="font-display text-2xl text-white mb-4">
@@ -130,7 +176,7 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
 
       <div className="space-y-4">
         {/* Board Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-wrap">
           {status === 'open' && (
             <button
               onClick={handleLock}
@@ -182,6 +228,15 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
               Board is ready - enter scores below
             </span>
           )}
+
+          {/* Settings Button - Available in all states */}
+          <button
+            onClick={() => setShowSettingsDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Pool Settings
+          </button>
         </div>
       </div>
 
@@ -240,6 +295,72 @@ export function OwnerControls({ poolId, status }: OwnerControlsProps) {
                 disabled={loading}
               >
                 {loading ? 'Removing...' : 'Yes, Un-randomize'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Settings Dialog */}
+      {mounted && showSettingsDialog && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
+            <h3 className="font-display text-2xl text-white mb-4">
+              Pool Settings
+            </h3>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-white/80 text-sm mb-2">
+                  Square Price ($)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={newSquarePrice}
+                  onChange={(e) => setNewSquarePrice(e.target.value)}
+                  className="input-field w-full"
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label className="block text-white/80 text-sm mb-2">
+                  Max Squares Per User (1-100)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={newMaxSquares}
+                  onChange={(e) => setNewMaxSquares(e.target.value)}
+                  className="input-field w-full"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => {
+                  setShowSettingsDialog(false);
+                  setNewSquarePrice(squarePrice.toString());
+                  setNewMaxSquares(maxSquaresPerUser.toString());
+                  setError(null);
+                }}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateSettings}
+                className="btn-primary"
+                disabled={loading}
+              >
+                {loading ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </div>

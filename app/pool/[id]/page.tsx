@@ -189,7 +189,12 @@ export default async function PoolDetailPage({ params }: PageProps) {
         {/* Owner Controls */}
         {isOwner && (
           <div className="mb-8">
-            <OwnerControls poolId={pool.id} status={pool.status} />
+            <OwnerControls
+              poolId={pool.id}
+              status={pool.status}
+              squarePrice={pool.square_price}
+              maxSquaresPerUser={pool.max_squares_per_user}
+            />
           </div>
         )}
 
