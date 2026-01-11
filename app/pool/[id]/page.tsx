@@ -60,6 +60,11 @@ export default async function PoolDetailPage({ params }: PageProps) {
       ? calculateAllWinners(scores, xDigits, yDigits, squares)
       : [];
 
+  // Calculate available squares
+  const availableSquares = squares.filter(
+    s => !s.claimed_by_user_id && !s.claimed_display_name
+  ).length;
+
   const gameDate = new Date(pool.game_time);
 
   return (
@@ -141,7 +146,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
           </div>
 
           {/* Game Info */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 pb-6 border-b border-white/10">
             <div>
               <span className="text-white/50 text-sm block mb-1">Teams</span>
               <span className="text-white font-semibold">
@@ -174,6 +179,14 @@ export default async function PoolDetailPage({ params }: PageProps) {
               </span>
               <span className="text-white font-semibold">
                 {pool.max_squares_per_user} squares
+              </span>
+            </div>
+            <div>
+              <span className="text-white/50 text-sm block mb-1">
+                Squares Available
+              </span>
+              <span className="text-white font-semibold">
+                {availableSquares} / 100
               </span>
             </div>
           </div>
