@@ -116,6 +116,7 @@ export function CreatePoolForm() {
             name="gameDate"
             type="date"
             required
+            defaultValue="2025-02-09"
             className="input-field"
           />
         </div>
@@ -127,6 +128,7 @@ export function CreatePoolForm() {
             name="gameTime"
             type="time"
             required
+            defaultValue="18:30"
             className="input-field"
           />
         </div>
