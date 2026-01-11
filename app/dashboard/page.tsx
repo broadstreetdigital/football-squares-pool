@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { requireAuth } from '@/lib/auth/session';
 import { findPoolsByOwner, findPoolsByUser } from '@/lib/db/repositories/pools';
-import { getUserSquareCount } from '@/lib/db/repositories/squares';
+import { getUserSquareCount, getAvailableSquaresCount } from '@/lib/db/repositories/squares';
 import { PoolCard } from '@/components/PoolCard';
 
 export default async function DashboardPage() {
@@ -30,11 +30,13 @@ export default async function DashboardPage() {
     ...ownedPools.map(async (pool) => ({
       pool,
       count: await getUserSquareCount(pool.id, session.user.id),
+      availableSquares: await getAvailableSquaresCount(pool.id),
       isOwner: true,
     })),
     ...participantPools.map(async (pool) => ({
       pool,
       count: await getUserSquareCount(pool.id, session.user.id),
+      availableSquares: await getAvailableSquaresCount(pool.id),
       isOwner: false,
     })),
   ]);
@@ -88,11 +90,12 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {allPoolsWithData.map(({ pool, count, isOwner }) => (
+              {allPoolsWithData.map(({ pool, count, availableSquares, isOwner }) => (
                 <PoolCard
                   key={pool.id}
                   pool={pool}
                   userSquareCount={count}
+                  availableSquares={availableSquares}
                   isOwner={isOwner}
                 />
               ))}

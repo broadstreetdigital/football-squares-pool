@@ -9,10 +9,11 @@ import type { Pool } from '@/lib/db/types';
 interface PoolCardProps {
   pool: Pool;
   userSquareCount?: number;
+  availableSquares?: number;
   isOwner?: boolean;
 }
 
-export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
+export function PoolCard({ pool, userSquareCount, availableSquares, isOwner }: PoolCardProps) {
   const gameDate = new Date(pool.game_time);
 
   return (
@@ -65,11 +66,20 @@ export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
               {pool.max_squares_per_user}
             </span>
           </div>
+
+          {availableSquares !== undefined && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-white/50">Squares Available:</span>
+              <span className="text-white font-semibold">
+                {availableSquares}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Bottom section with border and padding for View Pool link */}
         <div className="space-y-2 border-t border-white/10 pt-3 pb-8">
-          {userSquareCount !== undefined && userSquareCount > 0 && (
+          {userSquareCount !== undefined && (
             <div className="flex items-center justify-between text-sm">
               <span className="text-white/50">Your Squares:</span>
               <span className="text-stadium-gold font-semibold">

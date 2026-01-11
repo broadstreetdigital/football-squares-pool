@@ -11,9 +11,9 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
   const statusMap = {
-    open: { label: 'Open', className: 'status-open' },
-    locked: { label: 'Locked', className: 'status-locked' },
-    numbered: { label: 'Numbered', className: 'status-numbered' },
+    open: { label: 'Squares Available', className: 'status-open' },
+    locked: { label: 'Board Locked', className: 'status-locked' },
+    numbered: { label: 'Numbers Generated', className: 'status-numbered' },
     completed: { label: 'Completed', className: 'status-completed' },
   };
 

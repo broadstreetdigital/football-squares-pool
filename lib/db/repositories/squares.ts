@@ -193,3 +193,13 @@ export async function getClaimedSquaresCount(poolId: string): Promise<number> {
 
   return result?.count || 0;
 }
+
+export async function getAvailableSquaresCount(poolId: string): Promise<number> {
+  const result = await queryOne<{ count: number }>(
+    `SELECT COUNT(*) as count FROM squares
+     WHERE pool_id = ? AND claimed_by_user_id IS NULL AND claimed_display_name IS NULL`,
+    [poolId]
+  );
+
+  return result?.count || 0;
+}
