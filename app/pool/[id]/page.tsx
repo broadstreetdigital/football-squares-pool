@@ -177,6 +177,29 @@ export default async function PoolDetailPage({ params }: PageProps) {
             </div>
           </div>
 
+          {/* Pool Details (Entry Fee & Rules) */}
+          {(pool.entry_fee_info || pool.rules) && (
+            <div className="mb-6 pb-6 border-b border-white/10">
+              <div className="space-y-4">
+                {pool.entry_fee_info && (
+                  <div>
+                    <span className="text-white/50 text-sm block mb-1">Entry Fee</span>
+                    <span className="text-white">{pool.entry_fee_info}</span>
+                  </div>
+                )}
+
+                {pool.rules && (
+                  <div>
+                    <span className="text-white/50 text-sm block mb-1">Rules / Notes</span>
+                    <p className="text-white whitespace-pre-wrap">
+                      {pool.rules}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Share Link */}
           <ShareLink
             poolId={pool.id}
@@ -253,22 +276,6 @@ export default async function PoolDetailPage({ params }: PageProps) {
               </h3>
 
               <div className="space-y-3 text-sm">
-                {pool.entry_fee_info && (
-                  <div>
-                    <span className="text-white/50 block mb-1">Entry Fee</span>
-                    <span className="text-white">{pool.entry_fee_info}</span>
-                  </div>
-                )}
-
-                {pool.rules && (
-                  <div>
-                    <span className="text-white/50 block mb-1">Rules</span>
-                    <p className="text-white whitespace-pre-wrap">
-                      {pool.rules}
-                    </p>
-                  </div>
-                )}
-
                 <div>
                   <span className="text-white/50 block mb-1">Created</span>
                   <span className="text-white">
