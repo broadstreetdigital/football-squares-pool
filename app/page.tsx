@@ -13,31 +13,23 @@ export default async function HomePage() {
       {/* Stadium lights effect */}
       <div className="fixed inset-0 bg-stadium-lights pointer-events-none" />
 
-      {/* Yardlines */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Major yardlines (every 10 yards) */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent 0px,
-            transparent calc(10vh - 3px),
-            rgba(255, 255, 255, 0.25) calc(10vh - 3px),
-            rgba(255, 255, 255, 0.25) calc(10vh + 3px),
-            transparent calc(10vh + 3px)
-          )`
-        }} />
+      {/* Yard Marker - Vertical along left side */}
+      <div className="fixed left-0 top-0 bottom-0 w-12 pointer-events-none z-0">
+        {/* Yard marker background */}
+        <div className="absolute inset-0 bg-white/5 border-r-2 border-white/20" />
 
-        {/* Hash marks (every 1 yard between major lines) */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent 0px,
-            transparent calc(1vh - 0.5px),
-            rgba(255, 255, 255, 0.08) calc(1vh - 0.5px),
-            rgba(255, 255, 255, 0.08) calc(1vh + 0.5px),
-            transparent calc(1vh + 0.5px)
-          )`
-        }} />
+        {/* Yard numbers */}
+        <div className="absolute inset-0 flex flex-col justify-around py-8">
+          {[10, 20, 30, 40, 50, 40, 30, 20, 10].map((yard, idx) => (
+            <div key={idx} className="relative h-8">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="font-display text-xl text-white/30 rotate-0">{yard}</span>
+              </div>
+              {/* Tick mark */}
+              <div className="absolute right-0 top-1/2 w-4 h-0.5 bg-white/40" />
+            </div>
+          ))}
+        </div>
       </div>
 
 
