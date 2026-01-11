@@ -25,7 +25,16 @@ export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
             </h3>
             <p className="text-white/60 text-sm">{pool.game_name}</p>
           </div>
-          <StatusBadge status={pool.status} />
+          <div className="flex flex-col items-end gap-2">
+            <StatusBadge status={pool.status} />
+            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold ${
+              pool.visibility === 'private'
+                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                : 'bg-green-500/20 text-green-300 border border-green-500/30'
+            }`}>
+              {pool.visibility === 'private' ? 'PRIVATE' : 'PUBLIC'}
+            </span>
+          </div>
         </div>
 
         <div className="space-y-2 mb-4">
