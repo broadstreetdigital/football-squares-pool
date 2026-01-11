@@ -94,7 +94,7 @@ export function InviteCodeForm({ poolId, poolName }: InviteCodeFormProps) {
               onChange={(e) => setInviteCode(e.target.value)}
               maxLength={8}
               required
-              className="input-field text-center text-lg tracking-wider font-mono uppercase"
+              className="input-field text-center text-lg tracking-wider font-mono"
               placeholder="Enter code"
               autoFocus
             />
