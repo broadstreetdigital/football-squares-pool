@@ -363,19 +363,19 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
           {/* Settings and Edit Board buttons */}
           <button
-            onClick={() => setShowInviteDialog(true)}
-            disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Invite & Claim Squares
-          </button>
-
-          <button
             onClick={() => setShowSettingsDialog(true)}
             disabled={loading}
             className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Pool Settings
+          </button>
+
+          <button
+            onClick={() => setShowInviteDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Enter Squares for Someone Else
           </button>
 
           <button
@@ -619,12 +619,12 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
         document.body
       )}
 
-      {/* Invite & Claim Squares Dialog */}
+      {/* Enter Squares for Someone Else Dialog */}
       {mounted && showInviteDialog && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
           <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-2xl w-full shadow-2xl max-h-[80vh] flex flex-col">
             <h3 className="font-display text-2xl text-white mb-4">
-              Invite & Claim Squares
+              Enter Squares for Someone Else
             </h3>
 
             <p className="text-white/80 text-sm mb-4">
@@ -714,7 +714,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                 className="btn-primary"
                 disabled={loading || selectedSquares.length === 0}
               >
-                {loading ? 'Sending...' : 'Invite & Claim Squares'}
+                {loading ? 'Submitting...' : 'Submit'}
               </button>
             </div>
           </div>
