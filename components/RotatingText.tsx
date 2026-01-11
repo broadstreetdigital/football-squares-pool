@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 
 const phrases = [
   'THE BIG GAME',
-  'THE SUPER BOWL',
+  'SUPER BOWL',
+  'PLAYOFF GAMES',
   'COLLEGE BOWL GAMES',
   'ANY FOOTBALL GAME',
 ];
