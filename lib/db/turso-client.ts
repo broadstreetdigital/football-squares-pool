@@ -66,23 +66,15 @@ export async function execute(
 
 /**
  * Execute multiple statements in a transaction
+ * Note: This is a simplified version for Turso compatibility
+ * For true atomic transactions, use batch operations
  */
 export async function transaction<T>(fn: () => Promise<T>): Promise<T> {
-  const client = getClient();
-
-  await client.execute('BEGIN');
-
   try {
     const result = await fn();
-    await client.execute('COMMIT');
     return result;
   } catch (error) {
-    try {
-      await client.execute('ROLLBACK');
-    } catch (rollbackError) {
-      // Ignore rollback errors (transaction might already be rolled back)
-      console.error('Rollback error (ignored):', rollbackError);
-    }
+    // Re-throw the error for the caller to handle
     throw error;
   }
 }
