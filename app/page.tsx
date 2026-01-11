@@ -52,7 +52,7 @@ export default async function HomePage() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 container mx-auto px-16 md:px-20 py-6">
+      <nav className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-6">
         <div className="flex flex-row justify-between items-center gap-4">
           <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold leading-tight flex items-center gap-2 sm:gap-3">
             <img src="/football.svg" alt="Football" className="w-8 h-8 sm:w-10 sm:h-10" />
@@ -86,7 +86,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 container mx-auto px-16 md:px-20 py-16">
+      <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-5xl sm:text-7xl text-white mb-6 leading-tight">
             EASILY CREATE YOUR SQUARES POOL
@@ -216,7 +216,7 @@ export default async function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 container mx-auto px-16 md:px-20 py-8 mt-24 border-t border-white/10">
+      <footer className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-8 mt-24 border-t border-white/10">
         <div className="flex flex-col items-center gap-2">
           <p className="text-center text-white/50 text-sm">
             © 2026 Football Squares Pool • Built for game day fun
