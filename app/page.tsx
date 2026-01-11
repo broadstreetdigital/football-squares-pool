@@ -90,10 +90,10 @@ export default async function HomePage() {
       <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-5xl sm:text-7xl text-white mb-6 leading-tight">
-            CREATE YOUR SQUARES POOL
+            MANAGE YOUR SQUARES POOL
             <br />
-            <span className="text-stadium-gold">
-              FOR <RotatingText />
+            <span className="text-stadium-gold block">
+              <RotatingText />
             </span>
           </h2>
 
