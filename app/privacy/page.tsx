@@ -12,8 +12,9 @@ export default function PrivacyPolicyPage() {
 
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6 border-b border-white/10">
-        <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-tight">
-          FOOTBALL SQUARES POOL
+        <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-tight flex items-center gap-2 sm:gap-3">
+          <img src="/football.svg" alt="Football" className="w-7 h-7 sm:w-8 sm:h-8" />
+          <span>FOOTBALL SQUARES POOL</span>
         </Link>
       </nav>
 
