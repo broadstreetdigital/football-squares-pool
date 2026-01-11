@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're Invited to a Football Squares Pool</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #1a4d2e;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e5a37;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d6b3f 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 3px solid #f4b03e;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f4b03e;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+    .invitation-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    h1 {
+      color: #f4b03e;
+      font-size: 28px;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 15px 0;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e09e2d;
+    }
+    .highlight-box {
+      background-color: rgba(244, 176, 62, 0.15);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+      border-left: 4px solid #f4b03e;
+    }
+    .highlight-box h2 {
+      color: #f4b03e;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+    .pool-details {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .detail-item {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .detail-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    .detail-value {
+      color: #f4b03e;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .squares-list {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .square-item {
+      display: inline-block;
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      padding: 6px 12px;
+      border-radius: 4px;
+      margin: 4px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .footer {
+      padding: 30px;
+      text-align: center;
+      background-color: #153d24;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footer a {
+      color: #f4b03e;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="invitation-icon">🎉</div>
+      <div class="logo">FOOTBALL SQUARES POOL</div>
+    </div>
+
+    <div class="content">
+      <h1>You're Invited to Join a Pool!</h1>
+
+      <p>Hi {{invitedName}},</p>
+
+      <p><strong>{{managerName}}</strong> has invited you to join their Football Squares Pool and has selected squares for you!</p>
+
+      <div class="pool-details">
+        <div class="detail-item">
+          <span class="detail-label">Pool Name</span>
+          <span class="detail-value">{{poolName}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Game Date</span>
+          <span class="detail-value">{{gameDate}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Price Per Square</span>
+          <span class="detail-value">${{squarePrice}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Your Total</span>
+          <span class="detail-value">${{totalCost}}</span>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h2>Your Squares</h2>
+        <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 10px;">
+          {{managerName}} has claimed <strong>{{squareCount}}</strong> square{{#if multipleSquares}}s{{/if}} for you:
+        </p>
+        <div class="squares-list">
+          {{squaresList}}
+        </div>
+      </div>
+
+      <p>To view the pool and complete your account setup, click the button below:</p>
+
+      <center>
+        <a href="{{invitationUrl}}" class="cta-button">Complete Your Account & View Pool</a>
+      </center>
+
+      <p style="margin-top: 30px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+        This link will take you to a secure page where you can finish setting up your account with a password. Once you're done, you'll have full access to view the pool board and track the game!
+      </p>
+
+      <p style="font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+        <strong>Note:</strong> This invitation link will expire in 30 days.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>Built for game day fun</p>
+      <p>
+        <a href="{{siteUrl}}">footballsquarespool.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

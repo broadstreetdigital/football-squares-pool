@@ -203,3 +203,43 @@ export async function getAvailableSquaresCount(poolId: string): Promise<number> 
 
   return result?.count || 0;
 }
+
+export interface ParticipantInfo {
+  email: string;
+  display_name: string;
+  square_count: number;
+}
+
+/**
+ * Get unique participants with email addresses and their square counts
+ */
+export async function getPoolParticipants(poolId: string): Promise<ParticipantInfo[]> {
+  const participants = await query<ParticipantInfo>(
+    `SELECT
+       claimed_email as email,
+       claimed_display_name as display_name,
+       COUNT(*) as square_count
+     FROM squares
+     WHERE pool_id = ?
+       AND claimed_email IS NOT NULL
+     GROUP BY claimed_email, claimed_display_name
+     ORDER BY square_count DESC`,
+    [poolId]
+  );
+
+  return participants;
+}
+
+/**
+ * Get total number of unique participants (including those without email)
+ */
+export async function getParticipantCount(poolId: string): Promise<number> {
+  const result = await queryOne<{ count: number }>(
+    `SELECT COUNT(DISTINCT COALESCE(claimed_by_user_id, claimed_display_name)) as count
+     FROM squares
+     WHERE pool_id = ? AND (claimed_by_user_id IS NOT NULL OR claimed_display_name IS NOT NULL)`,
+    [poolId]
+  );
+
+  return result?.count || 0;
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Board Locked - Pool Update</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #1a4d2e;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e5a37;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d6b3f 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 3px solid #f4b03e;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f4b03e;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+    .status-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    h1 {
+      color: #f4b03e;
+      font-size: 28px;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 15px 0;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e09e2d;
+    }
+    .highlight-box {
+      background-color: rgba(244, 176, 62, 0.15);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+      border-left: 4px solid #f4b03e;
+      text-align: center;
+    }
+    .highlight-box h2 {
+      color: #f4b03e;
+      font-size: 20px;
+      margin: 0 0 10px 0;
+    }
+    .highlight-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 10px 0;
+    }
+    .info-box {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .info-box p {
+      margin: 8px 0;
+      font-size: 15px;
+    }
+    .info-item {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .info-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    .info-value {
+      color: #f4b03e;
+      font-weight: 600;
+    }
+    .footer {
+      padding: 30px;
+      text-align: center;
+      background-color: #153d24;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footer a {
+      color: #f4b03e;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="status-icon">🔒</div>
+      <div class="logo">FOOTBALL SQUARES POOL</div>
+    </div>
+
+    <div class="content">
+      <h1>Pool Board Locked</h1>
+
+      <p>Hi {{participantName}},</p>
+
+      <p>The board for <strong>{{poolName}}</strong> has been locked by the pool manager. No more squares can be claimed.</p>
+
+      <div class="highlight-box">
+        <h2>Your Squares</h2>
+        <div class="highlight-value">{{userSquareCount}}</div>
+        <p style="color: rgba(255, 255, 255, 0.8); margin: 0;">square{{#if multipleSquares}}s{{/if}} claimed</p>
+      </div>
+
+      <div class="info-box">
+        <div class="info-item">
+          <span class="info-label">Pool Name</span>
+          <span class="info-value">{{poolName}}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Game Date</span>
+          <span class="info-value">{{gameDate}}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Total Participants</span>
+          <span class="info-value">{{participantCount}}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Board Status</span>
+          <span class="info-value">🔒 Locked</span>
+        </div>
+      </div>
+
+      <p>The pool manager will randomize the digit assignments before the game begins. You'll receive another notification when that happens.</p>
+
+      <center>
+        <a href="{{poolUrl}}" class="cta-button">View Pool Board</a>
+      </center>
+
+      <p style="margin-top: 30px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+        Good luck! Check back before the game starts to see your assigned digit combinations.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>Built for game day fun</p>
+      <p>
+        <a href="{{siteUrl}}">footballsquarespool.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

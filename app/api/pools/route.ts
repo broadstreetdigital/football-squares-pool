@@ -10,6 +10,7 @@ import { createPool, getPublicPools } from '@/lib/db/repositories/pools';
 import { logEvent } from '@/lib/db/repositories/events';
 import { hashPassword } from '@/lib/auth/password';
 import { generateInviteCode } from '@/lib/utils/id';
+import { sendPoolCreatedEmail } from '@/lib/email/sendgrid';
 
 
 export async function POST(request: NextRequest) {
@@ -63,6 +64,25 @@ export async function POST(request: NextRequest) {
     } catch (logError) {
       console.error('Failed to log event (non-critical):', logError);
     }
+
+    // Send pool created email (non-blocking)
+    sendPoolCreatedEmail({
+      email: session.user.email,
+      managerName: session.user.name,
+      poolName: pool.name,
+      poolId: pool.id,
+      gameDate: new Date(pool.game_time).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+      maxSquares: pool.max_squares_per_user,
+      visibility: pool.visibility,
+    }).catch((err) => {
+      console.error('Failed to send pool created email:', err);
+      // Don't block pool creation if email fails
+    });
 
     return NextResponse.json(
       {

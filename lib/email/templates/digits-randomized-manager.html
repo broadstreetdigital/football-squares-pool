@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digits Randomized - Manager Notification</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #1a4d2e;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e5a37;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d6b3f 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 3px solid #f4b03e;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f4b03e;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+    .status-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    h1 {
+      color: #f4b03e;
+      font-size: 28px;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 15px 0;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e09e2d;
+    }
+    .status-box {
+      background-color: rgba(244, 176, 62, 0.15);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+      border-left: 4px solid #f4b03e;
+    }
+    .status-box h2 {
+      color: #f4b03e;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+    .digit-display {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 6px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .digit-row {
+      display: flex;
+      justify-content: space-around;
+      margin: 10px 0;
+    }
+    .digit {
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      min-width: 30px;
+      text-align: center;
+    }
+    .axis-label {
+      color: #f4b03e;
+      font-weight: 600;
+      font-size: 14px;
+      margin: 10px 0 5px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .info-item {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .info-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    .info-value {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .next-steps {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .next-steps h2 {
+      color: #f4b03e;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+    .step-item {
+      margin: 12px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+    .step-item:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #f4b03e;
+      font-weight: bold;
+    }
+    .footer {
+      padding: 30px;
+      text-align: center;
+      background-color: #153d24;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footer a {
+      color: #f4b03e;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="status-icon">🎲</div>
+      <div class="logo">FOOTBALL SQUARES POOL</div>
+    </div>
+
+    <div class="content">
+      <h1>Digits Randomized!</h1>
+
+      <p>Hi {{managerName}},</p>
+
+      <p>The digit assignments for <strong>{{poolName}}</strong> have been randomized. Your pool is now ready for game day!</p>
+
+      <div class="status-box">
+        <h2>Randomized Assignments</h2>
+
+        <div class="digit-display">
+          <div class="axis-label">{{teamAName}} (X-Axis)</div>
+          <div class="digit-row">
+            <span class="digit">{{xDigit0}}</span>
+            <span class="digit">{{xDigit1}}</span>
+            <span class="digit">{{xDigit2}}</span>
+            <span class="digit">{{xDigit3}}</span>
+            <span class="digit">{{xDigit4}}</span>
+            <span class="digit">{{xDigit5}}</span>
+            <span class="digit">{{xDigit6}}</span>
+            <span class="digit">{{xDigit7}}</span>
+            <span class="digit">{{xDigit8}}</span>
+            <span class="digit">{{xDigit9}}</span>
+          </div>
+        </div>
+
+        <div class="digit-display">
+          <div class="axis-label">{{teamBName}} (Y-Axis)</div>
+          <div class="digit-row">
+            <span class="digit">{{yDigit0}}</span>
+            <span class="digit">{{yDigit1}}</span>
+            <span class="digit">{{yDigit2}}</span>
+            <span class="digit">{{yDigit3}}</span>
+            <span class="digit">{{yDigit4}}</span>
+            <span class="digit">{{yDigit5}}</span>
+            <span class="digit">{{yDigit6}}</span>
+            <span class="digit">{{yDigit7}}</span>
+            <span class="digit">{{yDigit8}}</span>
+            <span class="digit">{{yDigit9}}</span>
+          </div>
+        </div>
+
+        <div class="info-item" style="margin-top: 20px;">
+          <span class="info-label">Randomized At</span>
+          <span class="info-value">{{randomizedTime}}</span>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h2>What's Next?</h2>
+        <div class="step-item">All participants have been notified</div>
+        <div class="step-item">Update scores during the game to track winners</div>
+        <div class="step-item">Winners will be highlighted automatically</div>
+      </div>
+
+      <center>
+        <a href="{{poolUrl}}" class="cta-button">View Pool Board</a>
+      </center>
+
+      <p style="margin-top: 30px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+        Your pool is all set! Remember to update scores during the game so participants can track potential winners in real-time.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>Built for game day fun</p>
+      <p>
+        <a href="{{siteUrl}}">footballsquarespool.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

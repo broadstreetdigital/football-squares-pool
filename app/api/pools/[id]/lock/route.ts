@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/session';
 import { findPoolById, updatePoolStatus } from '@/lib/db/repositories/pools';
 import { logEvent } from '@/lib/db/repositories/events';
+import { getClaimedSquaresCount, getParticipantCount, getPoolParticipants } from '@/lib/db/repositories/squares';
+import { sendBoardLockedManagerEmail, sendBoardLockedParticipantEmail } from '@/lib/email/sendgrid';
 
 
 export async function POST(
@@ -43,6 +45,45 @@ export async function POST(
     // Log event
     await logEvent(id, session.user.id, 'pool_locked', {
       pool_name: pool.name,
+    });
+
+    // Get stats for emails (non-blocking)
+    const claimedSquares = await getClaimedSquaresCount(id);
+    const participantCount = await getParticipantCount(id);
+    const participants = await getPoolParticipants(id);
+
+    // Send manager email (non-blocking)
+    sendBoardLockedManagerEmail({
+      email: session.user.email,
+      managerName: session.user.name,
+      poolName: pool.name,
+      poolId: pool.id,
+      claimedSquares,
+      participantCount,
+    }).catch((err) => {
+      console.error('Failed to send board locked manager email:', err);
+    });
+
+    // Send participant emails (non-blocking)
+    const gameDate = new Date(pool.game_time).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    participants.forEach((participant) => {
+      sendBoardLockedParticipantEmail({
+        email: participant.email,
+        participantName: participant.display_name,
+        poolName: pool.name,
+        poolId: pool.id,
+        gameDate,
+        userSquareCount: participant.square_count,
+        participantCount,
+      }).catch((err) => {
+        console.error(`Failed to send board locked email to ${participant.email}:`, err);
+      });
     });
 
     // Return updated pool

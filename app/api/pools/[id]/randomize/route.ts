@@ -9,6 +9,8 @@ import { findPoolById, updatePoolStatus } from '@/lib/db/repositories/pools';
 import { createAxisAssignment } from '@/lib/db/repositories/axis';
 import { logEvent } from '@/lib/db/repositories/events';
 import { generateRandomDigits } from '@/lib/game/randomize';
+import { getParticipantCount, getPoolParticipants } from '@/lib/db/repositories/squares';
+import { sendDigitsRandomizedManagerEmail, sendDigitsRandomizedParticipantEmail } from '@/lib/email/sendgrid';
 
 
 export async function POST(
@@ -53,6 +55,61 @@ export async function POST(
     await logEvent(id, session.user.id, 'pool_randomized', {
       x_digits: xDigits,
       y_digits: yDigits,
+    });
+
+    // Get stats for emails (non-blocking)
+    const participantCount = await getParticipantCount(id);
+    const participants = await getPoolParticipants(id);
+
+    const gameDate = new Date(pool.game_time).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const randomizedTime = new Date(axis.randomized_at).toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
+    // Send manager email (non-blocking)
+    sendDigitsRandomizedManagerEmail({
+      email: session.user.email,
+      managerName: session.user.name,
+      poolName: pool.name,
+      poolId: pool.id,
+      teamAName: pool.away_team || 'Away Team',
+      teamBName: pool.home_team || 'Home Team',
+      xDigits,
+      yDigits,
+      randomizedTime,
+    }).catch((err) => {
+      console.error('Failed to send digits randomized manager email:', err);
+    });
+
+    // Send participant emails (non-blocking)
+    participants.forEach((participant) => {
+      sendDigitsRandomizedParticipantEmail({
+        email: participant.email,
+        participantName: participant.display_name,
+        poolName: pool.name,
+        poolId: pool.id,
+        gameDate,
+        teamAName: pool.away_team || 'Away Team',
+        teamBName: pool.home_team || 'Home Team',
+        xDigits,
+        yDigits,
+        userSquareCount: participant.square_count,
+        participantCount,
+      }).catch((err) => {
+        console.error(`Failed to send digits randomized email to ${participant.email}:`, err);
+      });
     });
 
     return NextResponse.json({

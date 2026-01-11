@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pool Created Successfully</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #1a4d2e;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #1e5a37;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d6b3f 100%);
+      padding: 40px 20px;
+      text-align: center;
+      border-bottom: 3px solid #f4b03e;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f4b03e;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+    .football-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    h1 {
+      color: #f4b03e;
+      font-size: 28px;
+      margin: 0 0 20px 0;
+      font-weight: 700;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 15px 0;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background-color: #f4b03e;
+      color: #1a4d2e;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: background-color 0.3s;
+    }
+    .cta-button:hover {
+      background-color: #e09e2d;
+    }
+    .pool-details {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+      border-left: 4px solid #f4b03e;
+    }
+    .detail-item {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .detail-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    .detail-value {
+      color: #f4b03e;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .next-steps {
+      background-color: rgba(244, 176, 62, 0.1);
+      border-radius: 6px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    .next-steps h2 {
+      color: #f4b03e;
+      font-size: 18px;
+      margin: 0 0 15px 0;
+    }
+    .step-item {
+      margin: 12px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+    .step-item:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #f4b03e;
+      font-weight: bold;
+    }
+    .footer {
+      padding: 30px;
+      text-align: center;
+      background-color: #153d24;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .footer a {
+      color: #f4b03e;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="football-icon">🏈</div>
+      <div class="logo">FOOTBALL SQUARES POOL</div>
+    </div>
+
+    <div class="content">
+      <h1>Your Pool is Ready!</h1>
+
+      <p>Hi {{managerName}},</p>
+
+      <p>Great news! Your pool <strong>{{poolName}}</strong> has been created successfully and is ready for participants.</p>
+
+      <div class="pool-details">
+        <div class="detail-item">
+          <span class="detail-label">Pool Name</span>
+          <span class="detail-value">{{poolName}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Game Date</span>
+          <span class="detail-value">{{gameDate}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Max Squares per Person</span>
+          <span class="detail-value">{{maxSquares}}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Visibility</span>
+          <span class="detail-value">{{visibility}}</span>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h2>Next Steps</h2>
+        <div class="step-item">Share your pool link with participants</div>
+        <div class="step-item">Wait for participants to claim their squares</div>
+        <div class="step-item">Lock the board when you're ready</div>
+        <div class="step-item">Randomize the digits before the game starts</div>
+      </div>
+
+      <p>Ready to manage your pool?</p>
+
+      <center>
+        <a href="{{poolUrl}}" class="cta-button">View Your Pool</a>
+      </center>
+
+      <p style="margin-top: 30px; font-size: 14px; color: rgba(255, 255, 255, 0.7);">
+        You can access all your pools anytime from your dashboard. Share the pool link with friends and family so they can claim their squares!
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>Built for game day fun</p>
+      <p>
+        <a href="{{siteUrl}}">footballsquarespool.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

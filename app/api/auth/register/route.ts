@@ -10,6 +10,7 @@ import { hashPassword } from '@/lib/auth/password';
 import { createToken } from '@/lib/auth/jwt';
 import { createUser, findUserByEmail } from '@/lib/db/repositories/users';
 import { getCookieOptions } from '@/lib/auth/session';
+import { sendWelcomeEmail } from '@/lib/email/sendgrid';
 
 
 export async function POST(request: NextRequest) {
@@ -41,6 +42,17 @@ export async function POST(request: NextRequest) {
 
     // Create user
     const user = await createUser(email, passwordHash, name, emailConsent);
+
+    // Send welcome email (non-blocking)
+    if (emailConsent) {
+      sendWelcomeEmail({
+        email: user.email,
+        name: user.name,
+      }).catch((err) => {
+        console.error('Failed to send welcome email:', err);
+        // Don't block registration if email fails
+      });
+    }
 
     // Create JWT
     const token = await createToken(user.id, user.email, user.name);
