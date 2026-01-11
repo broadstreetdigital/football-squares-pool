@@ -23,7 +23,7 @@ export function PoolCard({ pool, userSquareCount, availableSquares, isOwner }: P
         <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
           {isOwner && (
             <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-stadium-gold/20 text-stadium-gold border border-stadium-gold/30">
-              You are the owner
+              You are the manager
             </span>
           )}
           <StatusBadge status={pool.status} />

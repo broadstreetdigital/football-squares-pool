@@ -135,7 +135,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
 
             {isOwner && (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-stadium-gold/20 text-stadium-gold">
-                You are the owner
+                You are the manager
               </span>
             )}
           </div>

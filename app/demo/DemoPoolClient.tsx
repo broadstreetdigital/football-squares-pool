@@ -171,7 +171,7 @@ export default function DemoPoolClient() {
       <div className="relative z-10 bg-stadium-gold text-turf-900 py-3">
         <div className="container mx-auto px-4 text-center">
           <p className="font-semibold">
-            🎮 DEMO MODE - This is a sample pool to explore owner features.{' '}
+            🎮 DEMO MODE - This is a sample pool to explore manager features.{' '}
             <Link href="/register" className="underline hover:no-underline">
               Sign up to create your own!
             </Link>
@@ -219,7 +219,7 @@ export default function DemoPoolClient() {
             </div>
 
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-stadium-gold/20 text-stadium-gold">
-              Demo Owner View
+              Demo Manager View
             </span>
           </div>
 
@@ -252,10 +252,10 @@ export default function DemoPoolClient() {
           </div>
         </div>
 
-        {/* Owner Controls */}
+        {/* Manager Controls */}
         <div className="mb-8">
           <div className="stadium-card p-6">
-            <h3 className="font-display text-2xl text-white mb-4">OWNER CONTROLS</h3>
+            <h3 className="font-display text-2xl text-white mb-4">MANAGER CONTROLS</h3>
 
             <div className="flex flex-wrap gap-3">
               {status === 'open' && (

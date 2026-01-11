@@ -195,7 +195,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
   return (
     <div className="stadium-card p-6">
       <h2 className="font-display text-2xl text-white mb-4">
-        OWNER CONTROLS
+        MANAGER CONTROLS
       </h2>
 
       {error && (
