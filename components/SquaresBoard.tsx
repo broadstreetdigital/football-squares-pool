@@ -128,7 +128,7 @@ export function SquaresBoard({
           {/* Home Team Name (Left side, rotated) */}
           {homeTeam && yDigits && (
             <div className="flex items-center justify-center w-6 sm:w-8">
-              <span className="font-display text-sm sm:text-base md:text-lg lg:text-xl text-white font-bold uppercase tracking-wide [writing-mode:vertical-lr] rotate-180">
+              <span className="font-display text-base sm:text-lg md:text-xl lg:text-2xl text-white font-bold uppercase tracking-wide [writing-mode:vertical-lr] rotate-180">
                 {homeTeam}
               </span>
             </div>
