@@ -170,13 +170,18 @@ export default async function PoolDetailPage({ params }: PageProps) {
           </div>
 
           {/* Share Link */}
-          <ShareLink poolId={pool.id} />
+          <ShareLink
+            poolId={pool.id}
+            isOwner={isOwner}
+            visibility={pool.visibility}
+            inviteCode={pool.invite_code}
+          />
         </div>
 
         {/* Owner Controls */}
         {isOwner && (
           <div className="mb-8">
-            <OwnerControls poolId={pool.id} status={pool.status} visibility={pool.visibility} inviteCode={pool.invite_code} />
+            <OwnerControls poolId={pool.id} status={pool.status} />
           </div>
         )}
 
