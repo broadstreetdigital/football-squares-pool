@@ -189,34 +189,22 @@ export default async function PoolDetailPage({ params }: PageProps) {
                 GAME BOARD
               </h2>
 
-              {/* Team Names and Info */}
-              <div className="mb-4 space-y-2">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/50 text-xs">Away (Top):</span>
-                    <span className="text-stadium-gold font-semibold">{pool.away_team}</span>
+              {/* Info */}
+              {canClaim && (
+                <div className="mb-4">
+                  <div className="text-stadium-gold text-sm">
+                    Max {pool.max_squares_per_user} squares per user
                   </div>
-                  <span className="hidden sm:inline text-white/30">•</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/50 text-xs">Home (Left):</span>
-                    <span className="text-stadium-gold font-semibold">{pool.home_team}</span>
-                  </div>
-                  {canClaim && (
-                    <>
-                      <span className="hidden sm:inline text-white/30">•</span>
-                      <span className="text-stadium-gold text-xs">
-                        Max {pool.max_squares_per_user} squares per user
-                      </span>
-                    </>
-                  )}
                 </div>
-              </div>
+              )}
 
               <SquaresBoard
                 poolId={pool.id}
                 squares={squares}
                 xDigits={xDigits}
                 yDigits={yDigits}
+                awayTeam={pool.away_team}
+                homeTeam={pool.home_team}
                 currentUserId={session?.user.id}
                 winners={winners.map((w) => ({ row: w.row, col: w.col }))}
                 canClaim={canClaim}

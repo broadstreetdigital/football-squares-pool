@@ -14,6 +14,8 @@ interface SquaresBoardProps {
   squares: Square[];
   xDigits?: number[];
   yDigits?: number[];
+  awayTeam?: string;
+  homeTeam?: string;
   currentUserId?: string;
   winners?: Array<{ row: number; col: number }>;
   canClaim: boolean;
@@ -25,6 +27,8 @@ export function SquaresBoard({
   squares,
   xDigits,
   yDigits,
+  awayTeam,
+  homeTeam,
   currentUserId,
   winners = [],
   canClaim,
@@ -121,14 +125,26 @@ export function SquaresBoard({
       {/* Board Container */}
       <div className="w-full overflow-x-auto -mx-2 px-2 pb-2">
         <div className="inline-block min-w-max">
+          {/* Away Team Name (Top) */}
+          {awayTeam && xDigits && (
+            <div className="flex mb-1">
+              <div className="w-10 sm:w-12 md:w-14 lg:w-16" /> {/* Spacer */}
+              <div className="flex-1 text-center">
+                <span className="font-display text-base sm:text-lg md:text-xl lg:text-2xl text-stadium-gold font-bold uppercase tracking-wide">
+                  {awayTeam}
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* X Axis (Away Team) */}
           {xDigits && (
             <div className="flex">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" /> {/* Corner spacer */}
+              <div className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12 lg:w-16 lg:h-14" /> {/* Corner spacer */}
               {xDigits.map((digit, i) => (
                 <div
                   key={i}
-                  className="w-14 h-12 sm:w-16 sm:h-14 md:w-20 md:h-16 lg:w-24 lg:h-20 flex items-center justify-center font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-stadium-gold font-bold"
+                  className="w-12 h-8 sm:w-14 sm:h-10 md:w-16 md:h-12 lg:w-20 lg:h-14 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold"
                 >
                   {digit}
                 </div>
@@ -141,7 +157,7 @@ export function SquaresBoard({
             <div key={row} className="flex">
               {/* Y Axis (Home Team) */}
               {yDigits && (
-                <div className="w-12 h-14 sm:w-14 sm:h-16 md:w-16 md:h-20 lg:w-20 lg:h-24 flex items-center justify-center font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-stadium-gold font-bold">
+                <div className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 lg:w-16 lg:h-20 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold">
                   {yDigits[row]}
                 </div>
               )}
@@ -150,17 +166,28 @@ export function SquaresBoard({
               {Array.from({ length: 10 }).map((_, col) => (
                 <button
                   key={col}
-                  className={cn(getSquareClass(row, col), 'w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 text-[10px] sm:text-xs md:text-sm')}
+                  className={cn(getSquareClass(row, col), 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[9px] sm:text-[10px] md:text-xs')}
                   onClick={() => toggleSquare(row, col)}
                   disabled={!canClaim || claiming}
                 >
-                  <span className="truncate px-0.5 sm:px-1 leading-tight">
+                  <span className="truncate px-0.5 leading-tight">
                     {getSquareContent(row, col)}
                   </span>
                 </button>
               ))}
             </div>
           ))}
+
+          {/* Home Team Name (Left side, rotated) */}
+          {homeTeam && yDigits && (
+            <div className="flex mt-1">
+              <div className="w-10 sm:w-12 md:w-14 lg:w-16 flex items-center justify-center">
+                <span className="font-display text-base sm:text-lg md:text-xl lg:text-2xl text-stadium-gold font-bold uppercase tracking-wide [writing-mode:vertical-lr] rotate-180">
+                  {homeTeam}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
