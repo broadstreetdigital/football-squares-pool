@@ -140,7 +140,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
           </div>
 
           {/* Game Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-6 border-b border-white/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-white/10">
             <div>
               <span className="text-white/50 text-sm block mb-1">Teams</span>
               <span className="text-white font-semibold">
@@ -165,6 +165,14 @@ export default async function PoolDetailPage({ params }: PageProps) {
               </span>
               <span className="text-white font-semibold">
                 ${pool.square_price.toFixed(2)}
+              </span>
+            </div>
+            <div>
+              <span className="text-white/50 text-sm block mb-1">
+                Max Per User
+              </span>
+              <span className="text-white font-semibold">
+                {pool.max_squares_per_user} squares
               </span>
             </div>
           </div>
