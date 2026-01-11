@@ -184,20 +184,27 @@ export default async function PoolDetailPage({ params }: PageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Squares Board */}
           <div className="lg:col-span-2">
-            <div className="stadium-card p-6">
-              <h2 className="font-display text-2xl text-white mb-6">
+            <div className="stadium-card p-4 sm:p-6">
+              <h2 className="font-display text-2xl text-white mb-4">
                 GAME BOARD
               </h2>
 
-              <div className="mb-4 text-sm">
-                <div className="flex items-center gap-4 text-white/60">
-                  <span>Away: {pool.away_team}</span>
-                  <span>•</span>
-                  <span>Home: {pool.home_team}</span>
+              {/* Team Names and Info */}
+              <div className="mb-4 space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-white/50 text-xs">Away (Top):</span>
+                    <span className="text-stadium-gold font-semibold">{pool.away_team}</span>
+                  </div>
+                  <span className="hidden sm:inline text-white/30">•</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white/50 text-xs">Home (Left):</span>
+                    <span className="text-stadium-gold font-semibold">{pool.home_team}</span>
+                  </div>
                   {canClaim && (
                     <>
-                      <span>•</span>
-                      <span className="text-stadium-gold">
+                      <span className="hidden sm:inline text-white/30">•</span>
+                      <span className="text-stadium-gold text-xs">
                         Max {pool.max_squares_per_user} squares per user
                       </span>
                     </>

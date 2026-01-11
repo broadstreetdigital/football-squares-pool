@@ -35,7 +35,7 @@
   }
 
   .square {
-    @apply aspect-square flex items-center justify-center text-xs sm:text-sm font-semibold border border-white/30 cursor-pointer transition-all duration-200 hover:scale-105;
+    @apply aspect-square flex items-center justify-center font-semibold border border-white/30 cursor-pointer transition-all duration-200 hover:scale-105 overflow-hidden;
   }
 
   .square-unclaimed {
