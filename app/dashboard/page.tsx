@@ -25,13 +25,19 @@ export default async function DashboardPage() {
     (pool) => !ownedPools.some((owned) => owned.id === pool.id)
   );
 
-  // Get square counts for joined pools
-  const joinedPoolsWithCounts = await Promise.all(
-    participantPools.map(async (pool) => {
-      const count = await getUserSquareCount(pool.id, session.user.id);
-      return { pool, count };
-    })
-  );
+  // Combine all pools with their metadata (owned pools first)
+  const allPoolsWithData = await Promise.all([
+    ...ownedPools.map(async (pool) => ({
+      pool,
+      count: await getUserSquareCount(pool.id, session.user.id),
+      isOwner: true,
+    })),
+    ...participantPools.map(async (pool) => ({
+      pool,
+      count: await getUserSquareCount(pool.id, session.user.id),
+      isOwner: false,
+    })),
+  ]);
 
   return (
     <div className="min-h-screen bg-turf-gradient bg-yard-pattern">
@@ -62,22 +68,18 @@ export default async function DashboardPage() {
       <main className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="font-display text-5xl text-white">DASHBOARD</h1>
+          <h1 className="font-display text-5xl text-white">MY POOLS</h1>
           <Link href="/pool/new" className="btn-primary">
             + Create New Pool
           </Link>
         </div>
 
-        {/* My Pools Section */}
-        <section className="mb-12">
-          <h2 className="font-display text-3xl text-stadium-gold mb-6">
-            MY POOLS
-          </h2>
-
-          {ownedPools.length === 0 ? (
+        {/* All Pools Section */}
+        <section>
+          {allPoolsWithData.length === 0 ? (
             <div className="stadium-card p-8 text-center">
               <p className="text-white/60 mb-4">
-                You haven't created any pools yet.
+                You haven't created or joined any pools yet.
               </p>
               <Link href="/pool/new" className="btn-primary">
                 Create Your First Pool
@@ -85,33 +87,12 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {ownedPools.map((pool) => (
-                <PoolCard key={pool.id} pool={pool} isOwner={true} />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Joined Pools Section */}
-        <section>
-          <h2 className="font-display text-3xl text-stadium-gold mb-6">
-            JOINED POOLS
-          </h2>
-
-          {joinedPoolsWithCounts.length === 0 ? (
-            <div className="stadium-card p-8 text-center">
-              <p className="text-white/60">
-                You haven't joined any pools yet. Ask friends for pool links!
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {joinedPoolsWithCounts.map(({ pool, count }) => (
+              {allPoolsWithData.map(({ pool, count, isOwner }) => (
                 <PoolCard
                   key={pool.id}
                   pool={pool}
                   userSquareCount={count}
-                  isOwner={false}
+                  isOwner={isOwner}
                 />
               ))}
             </div>
