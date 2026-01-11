@@ -126,7 +126,7 @@ export function SquaresBoard({
       <div className="w-full overflow-x-auto -mx-2 px-2 pb-2">
         <div className="flex gap-2">
           {/* Home Team Name (Left side, rotated) */}
-          {homeTeam && yDigits && (
+          {homeTeam && (
             <div className="flex items-center justify-center w-6 sm:w-8">
               <span className="font-display text-base sm:text-lg md:text-xl lg:text-2xl text-white font-bold uppercase tracking-wide [writing-mode:vertical-lr] rotate-180">
                 {homeTeam}
@@ -136,7 +136,7 @@ export function SquaresBoard({
 
           <div className="inline-block min-w-max flex-1">
             {/* Away Team Name (Top) */}
-            {awayTeam && xDigits && (
+            {awayTeam && (
               <div className="flex mb-1">
                 <div className="w-10 sm:w-12 md:w-14 lg:w-16" /> {/* Spacer */}
                 <div className="flex-1 text-center">
