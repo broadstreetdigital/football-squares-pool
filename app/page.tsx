@@ -17,7 +17,7 @@ export default async function HomePage() {
       <nav className="relative z-10 container mx-auto px-4 py-6">
         <div className="flex justify-between items-center">
           <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold">
-            FOOTBALL SQUARES POOL
+          FOOTBALL SQUARES POOL
           </h1>
 
           <div className="flex gap-4">

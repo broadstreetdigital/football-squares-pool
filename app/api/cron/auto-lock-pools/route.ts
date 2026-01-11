@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { query, execute } from '@/lib/db/client';
 import { Pool } from '@/lib/db/types';
 import { logEvent } from '@/lib/db/repositories/events';
-import { randomizeAxis } from '@/lib/game/randomize';
+import { generateRandomDigits } from '@/lib/game/randomize';
 
 export async function GET(request: NextRequest) {
   try {
@@ -54,7 +54,8 @@ export async function GET(request: NextRequest) {
         }
 
         // Now randomize the digits
-        const digits = randomizeAxis();
+        const xDigits = generateRandomDigits();
+        const yDigits = generateRandomDigits();
 
         await execute(
           `INSERT INTO axis_assignments (pool_id, x_digits_json, y_digits_json, randomized_at)
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
              x_digits_json = excluded.x_digits_json,
              y_digits_json = excluded.y_digits_json,
              randomized_at = excluded.randomized_at`,
-          [pool.id, JSON.stringify(digits), JSON.stringify(digits), now]
+          [pool.id, JSON.stringify(xDigits), JSON.stringify(yDigits), now]
         );
 
         await execute(
@@ -74,8 +75,8 @@ export async function GET(request: NextRequest) {
         await logEvent(pool.id, null, 'pool_randomized', {
           auto_randomized: true,
           reason: 'Game time reached',
-          x_digits: digits,
-          y_digits: digits,
+          x_digits: xDigits,
+          y_digits: yDigits,
         });
 
         results.push({
