@@ -59,6 +59,16 @@ export async function getScore(
   return score || null;
 }
 
+export async function deleteScore(
+  poolId: string,
+  bucket: Score['bucket']
+): Promise<void> {
+  await execute('DELETE FROM scores WHERE pool_id = ? AND bucket = ?', [
+    poolId,
+    bucket,
+  ]);
+}
+
 export async function deletePoolScores(poolId: string): Promise<void> {
   await execute('DELETE FROM scores WHERE pool_id = ?', [poolId]);
 }

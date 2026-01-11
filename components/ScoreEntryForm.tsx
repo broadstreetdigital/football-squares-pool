@@ -69,7 +69,7 @@ export function ScoreEntryForm({
     setLoading(true);
     setError(null);
 
-    // Build scores array (only include non-empty)
+    // Build scores array (only include buckets where BOTH fields have values)
     const scoresArray = [];
     for (const [bucket, values] of Object.entries(scores)) {
       if (values.away !== '' && values.home !== '') {
@@ -81,11 +81,8 @@ export function ScoreEntryForm({
       }
     }
 
-    if (scoresArray.length === 0) {
-      setError('Please enter at least one score');
-      setLoading(false);
-      return;
-    }
+    // Allow empty submission - this will clear all scores
+    // (API will handle deleting scores for buckets not in the submission)
 
     try {
       const res = await fetch(`/api/pools/${poolId}/scores`, {

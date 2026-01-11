@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/session';
 import { findPoolById, updatePoolStatus } from '@/lib/db/repositories/pools';
 import { updateScoresSchema } from '@/lib/utils/validation';
-import { upsertScore } from '@/lib/db/repositories/scores';
+import { upsertScore, deleteScore, getPoolScores } from '@/lib/db/repositories/scores';
 import { logEvent } from '@/lib/db/repositories/events';
 
 
@@ -49,7 +49,22 @@ export async function PUT(
       );
     }
 
-    // Update scores
+    // Get existing scores to determine which buckets to delete
+    const existingScores = await getPoolScores(id);
+    const existingBuckets = new Set(existingScores.map((s) => s.bucket));
+    const submittedBuckets = new Set(validation.data.scores.map((s) => s.bucket));
+
+    // Delete scores for buckets that existed before but are not in the submission
+    // (i.e., user cleared those fields)
+    const bucketsToDelete = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL'].filter(
+      (bucket) => existingBuckets.has(bucket) && !submittedBuckets.has(bucket)
+    );
+
+    for (const bucket of bucketsToDelete) {
+      await deleteScore(id, bucket as 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL');
+    }
+
+    // Update/insert scores that were provided
     const updatedScores = [];
     for (const score of validation.data.scores) {
       const updated = await upsertScore(
@@ -62,9 +77,12 @@ export async function PUT(
     }
 
     // If FINAL score is entered, mark pool as completed
+    // If FINAL score was removed, revert to numbered
     const hasFinal = validation.data.scores.some((s) => s.bucket === 'FINAL');
     if (hasFinal && pool.status !== 'completed') {
       await updatePoolStatus(id, 'completed');
+    } else if (!hasFinal && pool.status === 'completed' && bucketsToDelete.includes('FINAL')) {
+      await updatePoolStatus(id, 'numbered');
     }
 
     // Log event
