@@ -147,30 +147,26 @@ export function SquaresBoard({
               </div>
             )}
 
-            {/* X Axis (Away Team) */}
-            {xDigits && (
-              <div className="flex">
-                <div className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12 lg:w-16 lg:h-14" /> {/* Corner spacer */}
-                {xDigits.map((digit, i) => (
-                  <div
-                    key={i}
-                    className="w-12 h-8 sm:w-14 sm:h-10 md:w-16 md:h-12 lg:w-20 lg:h-14 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold"
-                  >
-                    {digit}
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* X Axis (Away Team) - Always show, with ? if not randomized */}
+            <div className="flex">
+              <div className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12 lg:w-16 lg:h-14" /> {/* Corner spacer */}
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="w-12 h-8 sm:w-14 sm:h-10 md:w-16 md:h-12 lg:w-20 lg:h-14 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold"
+                >
+                  {xDigits ? xDigits[i] : '?'}
+                </div>
+              ))}
+            </div>
 
             {/* Board Grid */}
             {Array.from({ length: 10 }).map((_, row) => (
               <div key={row} className="flex">
-                {/* Y Axis (Home Team) */}
-                {yDigits && (
-                  <div className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 lg:w-16 lg:h-20 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold">
-                    {yDigits[row]}
-                  </div>
-                )}
+                {/* Y Axis (Home Team) - Always show, with ? if not randomized */}
+                <div className="w-10 h-12 sm:w-12 sm:h-14 md:w-14 md:h-16 lg:w-16 lg:h-20 flex items-center justify-center font-display text-lg sm:text-xl md:text-2xl lg:text-3xl text-stadium-gold font-bold">
+                  {yDigits ? yDigits[row] : '?'}
+                </div>
 
                 {/* Squares */}
                 {Array.from({ length: 10 }).map((_, col) => (
