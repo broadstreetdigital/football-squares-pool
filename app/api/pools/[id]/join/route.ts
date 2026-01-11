@@ -49,8 +49,9 @@ export async function POST(
       );
     }
 
+    // Normalize to uppercase for comparison (invite codes are generated in uppercase)
     const valid = await verifyPassword(
-      validation.data.invite_code,
+      validation.data.invite_code.toUpperCase(),
       pool.invite_code_hash
     );
 
