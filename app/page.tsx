@@ -4,6 +4,7 @@
 
 import Link from 'next/link';
 import { getSession } from '@/lib/auth/session';
+import { RotatingText } from '@/components/RotatingText';
 
 export default async function HomePage() {
   const session = await getSession();
@@ -89,9 +90,11 @@ export default async function HomePage() {
       <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display text-5xl sm:text-7xl text-white mb-6 leading-tight">
-            EASILY CREATE YOUR SQUARES POOL
+            CREATE YOUR SQUARES POOL
             <br />
-            <span className="text-stadium-gold">FOR THE BIG GAME</span>
+            <span className="text-stadium-gold">
+              FOR <RotatingText />
+            </span>
           </h2>
 
           <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
