@@ -44,11 +44,15 @@ export async function POST(
       squares: validation.data.squares,
     });
 
-    // Log event
-    await logEvent(poolId, session.user.id, 'squares_claimed', {
-      count: validation.data.squares.length,
-      squares: validation.data.squares,
-    });
+    // Log event (don't fail if this errors)
+    try {
+      await logEvent(poolId, session.user.id, 'squares_claimed', {
+        count: validation.data.squares.length,
+        squares: validation.data.squares,
+      });
+    } catch (logError) {
+      console.error('Failed to log event (non-fatal):', logError);
+    }
 
     return NextResponse.json({
       success: true,
@@ -69,6 +73,13 @@ export async function POST(
       ) {
         return NextResponse.json({ error: error.message }, { status: 400 });
       }
+
+      // Return the actual error message for better debugging
+      console.error('Unexpected error:', error.message, error.stack);
+      return NextResponse.json(
+        { error: error.message || 'Internal server error' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
