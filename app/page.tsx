@@ -198,9 +198,14 @@ export default async function HomePage() {
 
       {/* Footer */}
       <footer className="relative z-10 container mx-auto px-4 py-8 mt-24 border-t border-white/10">
-        <p className="text-center text-white/50 text-sm">
-          © 2026 Football Squares Pool • Built for game day fun
-        </p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-white/50 text-sm">
+            © 2026 Football Squares Pool • Built for game day fun
+          </p>
+          <Link href="/privacy" className="text-white/50 hover:text-white text-sm">
+            Privacy Policy
+          </Link>
+        </div>
       </footer>
     </div>
   );

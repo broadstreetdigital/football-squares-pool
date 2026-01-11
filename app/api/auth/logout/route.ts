@@ -1,15 +1,17 @@
 /**
  * POST /api/auth/logout
- * Clear auth cookie
+ * Clear auth cookie and redirect to homepage
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
   cookieStore.delete('auth_token');
 
-  return NextResponse.json({ success: true });
+  // Redirect to homepage
+  const url = new URL('/', request.url);
+  return NextResponse.redirect(url);
 }

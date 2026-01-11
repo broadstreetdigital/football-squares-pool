@@ -9,15 +9,17 @@ import { generateId } from '@/lib/utils/id';
 export async function createUser(
   email: string,
   passwordHash: string,
-  name: string
+  name: string,
+  emailConsent: boolean
 ): Promise<User> {
   const id = generateId();
   const createdAt = Date.now();
+  const emailConsentValue = emailConsent ? 1 : 0; // Convert boolean to SQLite integer
 
   await execute(
-    `INSERT INTO users (id, email, password_hash, name, created_at)
-     VALUES (?, ?, ?, ?, ?)`,
-    [id, email.toLowerCase(), passwordHash, name, createdAt]
+    `INSERT INTO users (id, email, password_hash, name, email_consent, created_at)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [id, email.toLowerCase(), passwordHash, name, emailConsentValue, createdAt]
   );
 
   return {
@@ -25,6 +27,7 @@ export async function createUser(
     email: email.toLowerCase(),
     password_hash: passwordHash,
     name,
+    email_consent: emailConsentValue,
     created_at: createdAt,
   };
 }

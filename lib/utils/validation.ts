@@ -15,6 +15,9 @@ export const registerSchema = z.object({
     .string()
     .min(1, 'Name is required')
     .max(100, 'Name too long'),
+  emailConsent: z.boolean().refine((val) => val === true, {
+    message: 'You must consent to receive emails and agree to the Privacy Policy',
+  }),
 });
 
 export const loginSchema = z.object({

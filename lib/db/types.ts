@@ -7,6 +7,7 @@ export interface User {
   email: string;
   password_hash: string;
   name: string;
+  email_consent: number; // 0 = false, 1 = true (SQLite boolean)
   created_at: number;
 }
 

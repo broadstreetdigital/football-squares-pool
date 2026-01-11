@@ -36,10 +36,13 @@ export function RegisterForm() {
       return;
     }
 
+    const emailConsent = formData.get('emailConsent') === 'on';
+
     const data = {
       email: formData.get('email') as string,
       password,
       name: formData.get('name') as string,
+      emailConsent,
     };
 
     try {
@@ -132,6 +135,23 @@ export function RegisterForm() {
           className="input-field"
           placeholder="••••••••"
         />
+      </div>
+
+      <div className="flex items-start gap-3 p-4 bg-white/5 border border-white/20 rounded-lg">
+        <input
+          id="emailConsent"
+          name="emailConsent"
+          type="checkbox"
+          required
+          className="mt-1 w-4 h-4 rounded border-white/20 bg-white/10 text-stadium-gold focus:ring-stadium-gold focus:ring-offset-0"
+        />
+        <label htmlFor="emailConsent" className="text-sm text-white/80">
+          I agree to receive emails from Football Squares Pool and accept the{' '}
+          <Link href="/privacy" target="_blank" className="text-stadium-gold hover:underline">
+            Privacy Policy
+          </Link>
+          . <span className="text-red-400">*</span>
+        </label>
       </div>
 
       <button

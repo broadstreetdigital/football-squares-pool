@@ -34,7 +34,7 @@ export default async function LoginPage() {
               LOG IN
             </h1>
             <p className="text-white/60 text-center mb-8">
-              Welcome back to Football Squares
+              Welcome back to Football Squares Pool
             </p>
 
             <LoginForm />

@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { email, password, name } = validation.data;
+    const { email, password, name, emailConsent } = validation.data;
 
     // Check if user already exists
     const existing = await findUserByEmail(email);
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const passwordHash = await hashPassword(password);
 
     // Create user
-    const user = await createUser(email, passwordHash, name);
+    const user = await createUser(email, passwordHash, name, emailConsent);
 
     // Create JWT
     const token = await createToken(user.id, user.email, user.name);
