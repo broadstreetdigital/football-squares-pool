@@ -70,7 +70,7 @@ export async function execute(
 export async function transaction<T>(fn: () => Promise<T>): Promise<T> {
   const client = getClient();
 
-  await client.execute('BEGIN IMMEDIATE');
+  await client.execute('BEGIN');
 
   try {
     const result = await fn();
