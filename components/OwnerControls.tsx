@@ -252,25 +252,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
       <div className="space-y-4">
         {/* Board Actions */}
         <div className="flex items-center gap-4 flex-wrap">
-          {/* Settings Button - Always first */}
-          <button
-            onClick={() => setShowSettingsDialog(true)}
-            disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Pool Settings
-          </button>
-
-          {/* Edit Board Button - Available in all states */}
-          <button
-            onClick={() => setShowEditBoardDialog(true)}
-            disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Edit Board
-          </button>
-
-          {/* Status-specific buttons */}
+          {/* Primary action buttons first (yellow/gold) */}
           {status === 'open' && (
             <button
               onClick={handleLock}
@@ -282,22 +264,13 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           )}
 
           {status === 'locked' && (
-            <>
-              <button
-                onClick={handleUnlock}
-                disabled={loading}
-                className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Unlocking...' : 'Unlock Board'}
-              </button>
-              <button
-                onClick={() => setShowRandomizeConfirm(true)}
-                disabled={loading}
-                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Randomize Digits
-              </button>
-            </>
+            <button
+              onClick={() => setShowRandomizeConfirm(true)}
+              disabled={loading}
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Randomize Digits
+            </button>
           )}
 
           {status === 'numbered' && (
@@ -310,7 +283,35 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             </button>
           )}
 
-          {/* Clear Board Button - Available in all states */}
+          {/* Unlock button in second position when present */}
+          {status === 'locked' && (
+            <button
+              onClick={handleUnlock}
+              disabled={loading}
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Unlocking...' : 'Unlock Board'}
+            </button>
+          )}
+
+          {/* Settings and Edit Board buttons */}
+          <button
+            onClick={() => setShowSettingsDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Pool Settings
+          </button>
+
+          <button
+            onClick={() => setShowEditBoardDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Edit Board
+          </button>
+
+          {/* Clear Board Button - Last */}
           <button
             onClick={() => setShowClearBoardConfirm(true)}
             disabled={loading}
