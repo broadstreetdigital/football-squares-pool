@@ -56,12 +56,13 @@ export async function PUT(
 
     // Delete scores for buckets that existed before but are not in the submission
     // (i.e., user cleared those fields)
-    const bucketsToDelete = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL'].filter(
+    const allBuckets: Array<'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL'> = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL'];
+    const bucketsToDelete = allBuckets.filter(
       (bucket) => existingBuckets.has(bucket) && !submittedBuckets.has(bucket)
     );
 
     for (const bucket of bucketsToDelete) {
-      await deleteScore(id, bucket as 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL');
+      await deleteScore(id, bucket);
     }
 
     // Update/insert scores that were provided
