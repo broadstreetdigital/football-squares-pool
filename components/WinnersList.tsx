@@ -38,7 +38,7 @@ export function WinnersList({ winners }: WinnersListProps) {
                 {winner.bucket}
               </span>
               <span className="text-white/60 text-sm">
-                Square ({winner.row}, {winner.col})
+                Square (Row {winner.row + 1}, Col {winner.col + 1})
               </span>
             </div>
 
