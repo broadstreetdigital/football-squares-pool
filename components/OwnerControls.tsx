@@ -14,9 +14,15 @@ interface OwnerControlsProps {
   status: 'open' | 'locked' | 'numbered' | 'completed';
   squarePrice: number;
   maxSquaresPerUser: number;
+  squares?: Array<{
+    row: number;
+    col: number;
+    claimed_by_user_id: string | null;
+    claimed_display_name: string | null;
+  }>;
 }
 
-export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }: OwnerControlsProps) {
+export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, squares }: OwnerControlsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +30,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
   const [showUnrandomizeConfirm, setShowUnrandomizeConfirm] = useState(false);
   const [showClearBoardConfirm, setShowClearBoardConfirm] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [showEditBoardDialog, setShowEditBoardDialog] = useState(false);
   const [newSquarePrice, setNewSquarePrice] = useState(squarePrice.toString());
   const [newMaxSquares, setNewMaxSquares] = useState(maxSquaresPerUser.toString());
   const [mounted, setMounted] = useState(false);
@@ -192,11 +199,49 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
     }
   };
 
+  const handleRemoveClaim = async (row: number, col: number) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/pools/${poolId}/board`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ row, col }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error || 'Failed to remove claim');
+      }
+
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const claimedSquares = squares?.filter(s => s.claimed_by_user_id || s.claimed_display_name) || [];
+
   return (
     <div className="stadium-card p-6">
-      <h2 className="font-display text-2xl text-white mb-4">
-        MANAGER CONTROLS
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-display text-2xl text-white">
+          MANAGER CONTROLS
+        </h2>
+
+        {/* Board Ready Status */}
+        {(status === 'numbered' || status === 'completed') && (
+          <span className="text-green-400 text-sm flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+            Board is ready - enter scores below
+          </span>
+        )}
+      </div>
 
       {error && (
         <div className="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg mb-4">
@@ -207,6 +252,25 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
       <div className="space-y-4">
         {/* Board Actions */}
         <div className="flex items-center gap-4 flex-wrap">
+          {/* Settings Button - Always first */}
+          <button
+            onClick={() => setShowSettingsDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Pool Settings
+          </button>
+
+          {/* Edit Board Button - Available in all states */}
+          <button
+            onClick={() => setShowEditBoardDialog(true)}
+            disabled={loading}
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Edit Board
+          </button>
+
+          {/* Status-specific buttons */}
           {status === 'open' && (
             <button
               onClick={handleLock}
@@ -237,36 +301,14 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
           )}
 
           {status === 'numbered' && (
-            <>
-              <button
-                onClick={() => setShowUnrandomizeConfirm(true)}
-                disabled={loading}
-                className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Un-randomize
-              </button>
-              <span className="text-green-400 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-400" />
-                Board is ready - enter scores below
-              </span>
-            </>
+            <button
+              onClick={() => setShowUnrandomizeConfirm(true)}
+              disabled={loading}
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Un-randomize
+            </button>
           )}
-
-          {status === 'completed' && (
-            <span className="text-green-400 text-sm flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-400" />
-              Board is ready - enter scores below
-            </span>
-          )}
-
-          {/* Settings Button - Available in all states */}
-          <button
-            onClick={() => setShowSettingsDialog(true)}
-            disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Pool Settings
-          </button>
 
           {/* Clear Board Button - Available in all states */}
           <button
@@ -431,6 +473,69 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser }
                 disabled={loading}
               >
                 {loading ? 'Clearing...' : 'Yes, Clear Board'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Edit Board Dialog */}
+      {mounted && showEditBoardDialog && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-2xl w-full shadow-2xl max-h-[80vh] flex flex-col">
+            <h3 className="font-display text-2xl text-white mb-4">
+              Edit Board
+            </h3>
+
+            <p className="text-white/80 text-sm mb-4">
+              Click on any claimed square to remove that claim.
+            </p>
+
+            {claimedSquares.length === 0 ? (
+              <div className="text-white/60 text-center py-8">
+                No squares have been claimed yet.
+              </div>
+            ) : (
+              <div className="overflow-y-auto flex-1 mb-4">
+                <div className="grid grid-cols-1 gap-2">
+                  {claimedSquares.map((square) => (
+                    <button
+                      key={`${square.row}-${square.col}`}
+                      onClick={() => {
+                        if (window.confirm(`Remove claim for square (${square.row}, ${square.col}) claimed by ${square.claimed_display_name}?`)) {
+                          handleRemoveClaim(square.row, square.col);
+                          setShowEditBoardDialog(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-stadium-gold/50 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed text-left"
+                    >
+                      <div>
+                        <span className="text-white font-semibold">
+                          Square ({square.row}, {square.col})
+                        </span>
+                        <span className="text-white/60 text-sm block">
+                          Claimed by: {square.claimed_display_name}
+                        </span>
+                      </div>
+                      <span className="text-red-400 text-sm font-medium">Remove</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-end border-t border-white/10 pt-4">
+              <button
+                onClick={() => {
+                  setShowEditBoardDialog(false);
+                  setError(null);
+                }}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Close
               </button>
             </div>
           </div>

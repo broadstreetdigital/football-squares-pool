@@ -210,7 +210,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
           />
         </div>
 
-        {/* Owner Controls */}
+        {/* Manager Controls */}
         {isOwner && (
           <div className="mb-8">
             <OwnerControls
@@ -218,6 +218,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
               status={pool.status}
               squarePrice={pool.square_price}
               maxSquaresPerUser={pool.max_squares_per_user}
+              squares={squares}
             />
           </div>
         )}
