@@ -32,8 +32,8 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Yard Marker - Vertical along right side (decorative) */}
-      <div className="fixed right-0 top-0 bottom-0 w-12 md:w-16 pointer-events-none z-0">
+      {/* Yard Marker - Vertical along right side (decorative, hidden on mobile) */}
+      <div className="hidden md:block fixed right-0 top-0 bottom-0 w-12 md:w-16 pointer-events-none z-0">
         {/* Yard marker background */}
         <div className="absolute inset-0 bg-white/5 border-l-2 border-white/20" />
 
