@@ -27,16 +27,14 @@ export function RotatingText() {
   }, []);
 
   return (
-    <span className="relative inline-block min-w-[300px] sm:min-w-[500px]">
-      <span
-        className={`inline-block transition-all duration-500 ${
-          isAnimating
-            ? 'opacity-0 -translate-y-4'
-            : 'opacity-100 translate-y-0'
-        }`}
-      >
-        {phrases[currentIndex]}
-      </span>
+    <span
+      className={`inline-block transition-all duration-500 ${
+        isAnimating
+          ? 'opacity-0 -translate-y-4'
+          : 'opacity-100 translate-y-0'
+      }`}
+    >
+      {phrases[currentIndex]}
     </span>
   );
 }
