@@ -2,10 +2,7 @@
  * Pool Card Component
  */
 
-'use client';
-
 import Link from 'next/link';
-import { useState } from 'react';
 import { StatusBadge } from './StatusBadge';
 import type { Pool } from '@/lib/db/types';
 
@@ -17,28 +14,10 @@ interface PoolCardProps {
 
 export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
   const gameDate = new Date(pool.game_time);
-  const [copied, setCopied] = useState(false);
-
-  const poolUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/pool/${pool.id}`
-    : '';
-
-  const handleCopyUrl = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      await navigator.clipboard.writeText(poolUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy URL:', err);
-    }
-  };
 
   return (
     <Link href={`/pool/${pool.id}`}>
-      <div className="stadium-card p-6 hover:bg-white/5 transition-all cursor-pointer relative">
+      <div className="stadium-card p-6 hover:bg-white/5 transition-all cursor-pointer relative group">
         {/* Top right badges */}
         <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
           {isOwner && (
@@ -90,32 +69,39 @@ export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
           )}
         </div>
 
-        {/* Share URL */}
-        <div className="mb-4 pb-4 border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <span className="text-white/50 text-xs flex-shrink-0">Share:</span>
-            <input
-              type="text"
-              value={poolUrl}
-              readOnly
-              className="flex-1 bg-white/5 border border-white/10 rounded px-2 py-1 text-white/60 text-xs font-mono truncate"
-              onClick={(e) => e.preventDefault()}
-            />
-            <button
-              onClick={handleCopyUrl}
-              className="flex-shrink-0 bg-stadium-gold/20 hover:bg-stadium-gold/30 text-stadium-gold px-3 py-1 rounded text-xs font-semibold transition-colors border border-stadium-gold/30"
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
+        {/* Bottom section with border */}
+        <div className="space-y-2 border-t border-white/10 pt-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/50">Square Price:</span>
+            <span className="text-white font-semibold">
+              ${pool.square_price.toFixed(2)}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-white/50">Max Squares Per User:</span>
+            <span className="text-white font-semibold">
+              {pool.max_squares_per_user}
+            </span>
           </div>
         </div>
 
-        {/* Square price */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-white/50">Square Price:</span>
-          <span className="text-white font-semibold">
-            ${pool.square_price.toFixed(2)}
-          </span>
+        {/* View Pool indicator - Arrow */}
+        <div className="absolute bottom-4 right-4 flex items-center gap-2 text-stadium-gold/60 group-hover:text-stadium-gold transition-colors">
+          <span className="text-xs font-semibold">View Pool</span>
+          <svg
+            className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            />
+          </svg>
         </div>
       </div>
     </Link>
