@@ -12,6 +12,14 @@ import { StatusBadge } from '@/components/StatusBadge';
 type PoolStatus = 'open' | 'locked' | 'numbered' | 'completed';
 type Bucket = 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL';
 
+const bucketLabels: Record<Bucket, string> = {
+  Q1: '1st Quarter',
+  Q2: '2nd Quarter',
+  Q3: '3rd Quarter',
+  Q4: '4th Quarter',
+  FINAL: 'Final',
+};
+
 interface Square {
   row: number;
   col: number;
@@ -375,7 +383,7 @@ export default function DemoPoolClient() {
                     const score = scores.find((s) => s.bucket === bucket);
                     return (
                       <div key={bucket} className="border border-white/10 rounded-lg p-3">
-                        <div className="text-white/70 text-xs mb-2">{bucket}</div>
+                        <div className="text-white/70 text-xs mb-2">{bucketLabels[bucket]}</div>
                         <div className="flex gap-2">
                           <input
                             type="number"
@@ -423,7 +431,7 @@ export default function DemoPoolClient() {
                       className="flex items-center justify-between p-3 bg-stadium-gold/10 border border-stadium-gold/30 rounded-lg"
                     >
                       <div>
-                        <div className="text-stadium-gold font-semibold">{winner.bucket}</div>
+                        <div className="text-stadium-gold font-semibold">{bucketLabels[winner.bucket]}</div>
                         <div className="text-white/70 text-sm">
                           {winner.claimedBy || 'Unclaimed'}
                         </div>

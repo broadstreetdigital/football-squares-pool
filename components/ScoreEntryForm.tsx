@@ -17,6 +17,14 @@ interface ScoreEntryFormProps {
 
 type Bucket = 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL';
 
+const bucketLabels: Record<Bucket, string> = {
+  Q1: '1st Quarter',
+  Q2: '2nd Quarter',
+  Q3: '3rd Quarter',
+  Q4: '4th Quarter',
+  FINAL: 'Final',
+};
+
 export function ScoreEntryForm({
   poolId,
   existingScores,
@@ -114,7 +122,7 @@ export function ScoreEntryForm({
         {(['Q1', 'Q2', 'Q3', 'Q4', 'FINAL'] as Bucket[]).map((bucket) => (
           <div key={bucket} className="border border-white/10 rounded-lg p-4">
             <h4 className="font-display text-lg text-stadium-gold mb-3">
-              {bucket}
+              {bucketLabels[bucket]}
             </h4>
 
             <div className="grid grid-cols-2 gap-4">

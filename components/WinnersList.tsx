@@ -8,6 +8,16 @@ interface WinnersListProps {
   winners: Winner[];
 }
 
+type Bucket = 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'FINAL';
+
+const bucketLabels: Record<Bucket, string> = {
+  Q1: '1st Quarter',
+  Q2: '2nd Quarter',
+  Q3: '3rd Quarter',
+  Q4: '4th Quarter',
+  FINAL: 'Final',
+};
+
 export function WinnersList({ winners }: WinnersListProps) {
   if (winners.length === 0) {
     return (
@@ -35,7 +45,7 @@ export function WinnersList({ winners }: WinnersListProps) {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="font-display text-xl text-stadium-gold">
-                {winner.bucket}
+                {bucketLabels[winner.bucket as Bucket]}
               </span>
               <span className="text-white/60 text-sm">
                 Square (Row {winner.row + 1}, Col {winner.col + 1})
