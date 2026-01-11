@@ -9,19 +9,46 @@ export default async function HomePage() {
   const session = await getSession();
 
   return (
-    <div className="min-h-screen bg-football-field">
+    <div className="min-h-screen bg-football-field relative">
       {/* Stadium lights effect */}
       <div className="fixed inset-0 bg-stadium-lights pointer-events-none" />
+
+      {/* Yardlines */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Major yardlines (every 10 yards) */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent calc(10vh - 3px),
+            rgba(255, 255, 255, 0.25) calc(10vh - 3px),
+            rgba(255, 255, 255, 0.25) calc(10vh + 3px),
+            transparent calc(10vh + 3px)
+          )`
+        }} />
+
+        {/* Hash marks (every 1 yard between major lines) */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent calc(1vh - 0.5px),
+            rgba(255, 255, 255, 0.08) calc(1vh - 0.5px),
+            rgba(255, 255, 255, 0.08) calc(1vh + 0.5px),
+            transparent calc(1vh + 0.5px)
+          )`
+        }} />
+      </div>
 
 
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-row justify-between items-center gap-4">
           <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold leading-tight">
             FOOTBALL<br className="sm:hidden" /> SQUARES POOL
           </h1>
 
-          <div className="flex flex-wrap gap-2 sm:gap-4">
+          <div className="flex flex-wrap gap-2 sm:gap-4 justify-end">
             {session ? (
               <>
                 <Link href="/dashboard" className="btn-secondary text-sm sm:text-base">
