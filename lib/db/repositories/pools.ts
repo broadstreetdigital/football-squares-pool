@@ -118,11 +118,14 @@ export async function findPoolsByOwner(ownerId: string): Promise<Pool[]> {
 
 export async function findPoolsByUser(userId: string): Promise<Pool[]> {
   // Pools where user has claimed at least one square
+  // Using GROUP BY instead of DISTINCT to ensure uniqueness
   return await query<Pool>(
-    `SELECT DISTINCT p.*
+    `SELECT p.*
      FROM pools p
-     JOIN squares s ON p.id = s.pool_id
-     WHERE s.claimed_by_user_id = ?
+     WHERE EXISTS (
+       SELECT 1 FROM squares s
+       WHERE s.pool_id = p.id AND s.claimed_by_user_id = ?
+     )
      ORDER BY p.created_at DESC`,
     [userId]
   );
