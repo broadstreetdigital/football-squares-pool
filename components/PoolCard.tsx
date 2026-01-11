@@ -59,29 +59,29 @@ export function PoolCard({ pool, userSquareCount, isOwner }: PoolCardProps) {
             </span>
           </div>
 
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-white/50">Max Squares Per User:</span>
+            <span className="text-white font-semibold">
+              {pool.max_squares_per_user}
+            </span>
+          </div>
+        </div>
+
+        {/* Bottom section with border and padding for View Pool link */}
+        <div className="space-y-2 border-t border-white/10 pt-3 pb-8">
           {userSquareCount !== undefined && userSquareCount > 0 && (
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-white/50">Your Squares:</span>
               <span className="text-stadium-gold font-semibold">
                 {userSquareCount}
               </span>
             </div>
           )}
-        </div>
 
-        {/* Bottom section with border */}
-        <div className="space-y-2 border-t border-white/10 pt-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-white/50">Square Price:</span>
             <span className="text-white font-semibold">
               ${pool.square_price.toFixed(2)}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-white/50">Max Squares Per User:</span>
-            <span className="text-white font-semibold">
-              {pool.max_squares_per_user}
             </span>
           </div>
         </div>
