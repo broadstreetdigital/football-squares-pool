@@ -87,9 +87,9 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-8 md:py-16">
+      <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-6 md:py-16">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-display text-5xl sm:text-7xl text-white mb-6 leading-tight sm:leading-tight">
+          <h2 className="font-display text-5xl leading-[1.1] sm:text-8xl text-white mb-4 sm:mb-6 sm:leading-[0.95]">
             MANAGE YOUR SQUARES POOL
             <br />
             <span className="text-stadium-gold block">
@@ -97,7 +97,7 @@ export default async function HomePage() {
             </span>
           </h2>
 
-          <p className="text-lg sm:text-xl text-white/80 mb-10 sm:mb-12 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-white/80 mb-8 sm:mb-12 max-w-2xl mx-auto">
             Run your football squares pool with ease. Perfect for Super Bowl parties, playoff games, and any matchup. Powerful tools for managers, effortless experience for participants.
           </p>
 
