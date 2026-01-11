@@ -45,8 +45,8 @@ export function ShareLink({ poolId, isOwner, visibility, inviteCode }: ShareLink
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div className="space-y-2">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="space-y-2 lg:col-span-2">
         <label className="block text-sm font-medium text-white/80">
           Share this pool
         </label>
@@ -70,7 +70,7 @@ export function ShareLink({ poolId, isOwner, visibility, inviteCode }: ShareLink
 
       {/* Invite Code Section - Only for private pools and owners */}
       {isOwner && visibility === 'private' && inviteCode && (
-        <div className="space-y-2">
+        <div className="space-y-2 p-4 bg-white/5 rounded-lg border border-white/10">
           <div className="flex items-center justify-between">
             <span className="text-white/80 text-sm font-medium">Invite Code</span>
             <button
