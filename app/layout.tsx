@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: 'Football Squares Pool',
   description: 'Create and manage football squares pools for game day',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/favicon.png',
   },
 };
 
