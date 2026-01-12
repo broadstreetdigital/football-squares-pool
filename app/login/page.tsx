@@ -21,9 +21,9 @@ export default async function LoginPage() {
 
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6">
-        <Link href="/" className="font-display text-sm sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
+        <Link href="/" className="font-display text-xl sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
           <img src="/logo.png" alt="Football" className="w-16 h-16 sm:w-10 sm:h-10 flex-shrink-0" />
-          <span className="leading-[0.9]">FOOTBALL<br className="sm:hidden" /> SQUARES POOL</span>
+          <span className="leading-[0.9]">SQUARES<br className="sm:hidden" /> POOL</span>
         </Link>
       </nav>
 
