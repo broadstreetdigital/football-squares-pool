@@ -55,9 +55,9 @@ export default async function HomePage() {
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-6">
         <div className="flex flex-row justify-between items-center gap-4">
-          <h1 className="font-display text-3xl sm:text-4xl text-stadium-gold leading-none flex items-center gap-2 sm:gap-3">
+          <h1 className="font-display text-lg sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
             <img src="/logo.png" alt="Football" className="w-16 h-16 sm:w-10 sm:h-10 flex-shrink-0" />
-            <span className="leading-[1.1]">FOOTBALL<br className="sm:hidden" /> SQUARES POOL</span>
+            <span className="leading-[0.9]">FOOTBALL<br className="sm:hidden" /> SQUARES POOL</span>
           </h1>
 
           <div className="flex flex-wrap gap-2 sm:gap-4 justify-end">
