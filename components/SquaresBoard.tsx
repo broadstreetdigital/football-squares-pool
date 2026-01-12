@@ -113,6 +113,10 @@ export function SquaresBoard({
     return '';
   };
 
+  const getSquareNumber = (row: number, col: number) => {
+    return row * 10 + col + 1;
+  };
+
   return (
     <div className="space-y-4">
       {/* Error Display */}
@@ -172,10 +176,15 @@ export function SquaresBoard({
                 {Array.from({ length: 10 }).map((_, col) => (
                   <button
                     key={col}
-                    className={cn(getSquareClass(row, col), 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[9px] sm:text-[10px] md:text-xs')}
+                    className={cn(getSquareClass(row, col), 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 text-[9px] sm:text-[10px] md:text-xs relative')}
                     onClick={() => toggleSquare(row, col)}
                     disabled={!canClaim || claiming}
                   >
+                    {/* Square number - subtle in top-left corner */}
+                    <span className="absolute top-0.5 left-0.5 sm:top-1 sm:left-1 text-[7px] sm:text-[8px] md:text-[9px] text-white/30 font-mono leading-none">
+                      {getSquareNumber(row, col)}
+                    </span>
+                    {/* Player name */}
                     <span className="truncate px-0.5 leading-tight">
                       {getSquareContent(row, col)}
                     </span>
