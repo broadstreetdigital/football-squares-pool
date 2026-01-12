@@ -22,7 +22,7 @@ export default async function NewPoolPage() {
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6 border-b border-white/10">
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-display text-2xl sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
+          <Link href="/" className="font-display text-[2.1rem] sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
             <img src="/logo.png" alt="Football" className="w-14 h-14 sm:w-10 sm:h-10 flex-shrink-0" />
             <span className="leading-[0.9]">SQUARES<br className="sm:hidden" /> POOL</span>
           </Link>
