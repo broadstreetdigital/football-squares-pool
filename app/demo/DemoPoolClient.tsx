@@ -182,8 +182,8 @@ export default function DemoPoolClient() {
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-4 py-6 border-b border-white/10">
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-tight flex items-center gap-2 sm:gap-3">
-            <img src="/logo.png" alt="Football" className="w-7 h-7 sm:w-8 sm:h-8" />
+          <Link href="/" className="font-display text-2xl sm:text-3xl text-stadium-gold leading-none flex items-center gap-2 sm:gap-3">
+            <img src="/logo.png" alt="Football" className="w-16 h-16 sm:w-10 sm:h-10 flex-shrink-0" />
             <span>FOOTBALL SQUARES POOL</span>
           </Link>
 
