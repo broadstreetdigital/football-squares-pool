@@ -30,8 +30,9 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
   const [showUnrandomizeConfirm, setShowUnrandomizeConfirm] = useState(false);
   const [showClearBoardConfirm, setShowClearBoardConfirm] = useState(false);
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-  const [showEditBoardDialog, setShowEditBoardDialog] = useState(false);
-  const [showInviteDialog, setShowInviteDialog] = useState(false);
+  const [showEditPlayersMenu, setShowEditPlayersMenu] = useState(false);
+  const [showClaimSquaresDialog, setShowClaimSquaresDialog] = useState(false);
+  const [showRemovePlayersDialog, setShowRemovePlayersDialog] = useState(false);
   const [inviteName, setInviteName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [selectedSquares, setSelectedSquares] = useState<Array<{ row: number; col: number }>>([]);
@@ -265,7 +266,8 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
       setInviteName('');
       setInviteEmail('');
       setSelectedSquares([]);
-      setShowInviteDialog(false);
+      setShowClaimSquaresDialog(false);
+      setShowEditPlayersMenu(false);
 
       router.refresh();
     } catch (err) {
@@ -288,6 +290,11 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
   const isSquareSelected = (row: number, col: number) => {
     return selectedSquares.some(s => s.row === row && s.col === col);
+  };
+
+  // Generate square number (1-100)
+  const getSquareNumber = (row: number, col: number) => {
+    return row * 10 + col + 1;
   };
 
   const unclaimedSquares = squares?.filter(s => !s.claimed_by_user_id && !s.claimed_display_name) || [];
@@ -361,7 +368,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             </button>
           )}
 
-          {/* Settings and Edit Board buttons */}
+          {/* Settings and Edit Players buttons */}
           <button
             onClick={() => setShowSettingsDialog(true)}
             disabled={loading}
@@ -371,19 +378,11 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           </button>
 
           <button
-            onClick={() => setShowInviteDialog(true)}
+            onClick={() => setShowEditPlayersMenu(true)}
             disabled={loading}
             className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Enter Squares for Someone Else
-          </button>
-
-          <button
-            onClick={() => setShowEditBoardDialog(true)}
-            disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Edit Board
+            Edit Players
           </button>
 
           {/* Clear Board Button - Last */}
@@ -556,62 +555,59 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
         document.body
       )}
 
-      {/* Edit Board Dialog */}
-      {mounted && showEditBoardDialog && createPortal(
+      {/* Edit Players Menu */}
+      {mounted && showEditPlayersMenu && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-2xl w-full shadow-2xl max-h-[80vh] flex flex-col">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
             <h3 className="font-display text-2xl text-white mb-4">
-              Edit Board
+              Edit Players
             </h3>
-
-            <p className="text-white/80 text-sm mb-4">
-              Click on any claimed square to remove that claim.
+            <p className="text-white/80 text-sm mb-6">
+              Choose an action to manage players in your pool.
             </p>
 
-            {claimedSquares.length === 0 ? (
-              <div className="text-white/60 text-center py-8">
-                No squares have been claimed yet.
-              </div>
-            ) : (
-              <div className="overflow-y-auto flex-1 mb-4">
-                <div className="grid grid-cols-1 gap-2">
-                  {claimedSquares.map((square) => (
-                    <button
-                      key={`${square.row}-${square.col}`}
-                      onClick={() => {
-                        if (window.confirm(`Remove claim for square (${square.row}, ${square.col}) claimed by ${square.claimed_display_name}?`)) {
-                          handleRemoveClaim(square.row, square.col);
-                          setShowEditBoardDialog(false);
-                        }
-                      }}
-                      disabled={loading}
-                      className="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-stadium-gold/50 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed text-left"
-                    >
-                      <div>
-                        <span className="text-white font-semibold">
-                          Square ({square.row}, {square.col})
-                        </span>
-                        <span className="text-white/60 text-sm block">
-                          Claimed by: {square.claimed_display_name}
-                        </span>
-                      </div>
-                      <span className="text-red-400 text-sm font-medium">Remove</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="flex gap-3 justify-end border-t border-white/10 pt-4">
+            <div className="space-y-3">
               <button
                 onClick={() => {
-                  setShowEditBoardDialog(false);
+                  setShowEditPlayersMenu(false);
+                  setShowClaimSquaresDialog(true);
+                }}
+                className="w-full btn-primary text-left px-6 py-4 flex items-center justify-between"
+                disabled={loading}
+              >
+                <div>
+                  <div className="font-semibold">Claim Squares for Someone</div>
+                  <div className="text-sm text-white/70 mt-1">Enter squares on behalf of a participant</div>
+                </div>
+                <span className="text-2xl">→</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowEditPlayersMenu(false);
+                  setShowRemovePlayersDialog(true);
+                }}
+                className="w-full btn-secondary text-left px-6 py-4 flex items-center justify-between"
+                disabled={loading}
+              >
+                <div>
+                  <div className="font-semibold">Remove Players</div>
+                  <div className="text-sm text-white/70 mt-1">Remove claimed squares from the board</div>
+                </div>
+                <span className="text-2xl">→</span>
+              </button>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={() => {
+                  setShowEditPlayersMenu(false);
                   setError(null);
                 }}
                 className="btn-secondary"
                 disabled={loading}
               >
-                Close
+                Cancel
               </button>
             </div>
           </div>
@@ -619,19 +615,19 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
         document.body
       )}
 
-      {/* Enter Squares for Someone Else Dialog */}
-      {mounted && showInviteDialog && createPortal(
+      {/* Claim Squares for Someone Dialog */}
+      {mounted && showClaimSquaresDialog && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-2xl w-full shadow-2xl max-h-[80vh] flex flex-col">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] flex flex-col">
             <h3 className="font-display text-2xl text-white mb-4">
-              Enter Squares for Someone Else
+              Claim Squares for Someone
             </h3>
 
             <p className="text-white/80 text-sm mb-4">
               Claim squares on behalf of someone else. They'll receive an email invitation to complete their account and view the pool.
             </p>
 
-            <div className="space-y-4 mb-4">
+            <div className="space-y-4 mb-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-white/80 text-sm mb-2">
                   Participant Name *
@@ -673,20 +669,20 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                     No unclaimed squares available
                   </div>
                 ) : (
-                  <div className="overflow-y-auto max-h-[200px] bg-white/5 rounded p-3">
-                    <div className="grid grid-cols-5 gap-2">
+                  <div className="overflow-y-auto max-h-[400px] bg-white/5 rounded p-3">
+                    <div className="grid grid-cols-10 gap-2">
                       {unclaimedSquares.map((square) => (
                         <button
                           key={`${square.row}-${square.col}`}
                           onClick={() => toggleSquareSelection(square.row, square.col)}
                           disabled={loading}
-                          className={`p-2 rounded border transition-all text-sm font-semibold ${
+                          className={`p-2 rounded border transition-all text-xs font-semibold ${
                             isSquareSelected(square.row, square.col)
                               ? 'bg-stadium-gold/30 border-stadium-gold text-white'
                               : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10 hover:border-white/40'
                           } disabled:opacity-50 disabled:cursor-not-allowed`}
                         >
-                          ({square.row},{square.col})
+                          {getSquareNumber(square.row, square.col)}
                         </button>
                       ))}
                     </div>
@@ -698,16 +694,17 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <div className="flex gap-3 justify-end border-t border-white/10 pt-4">
               <button
                 onClick={() => {
-                  setShowInviteDialog(false);
+                  setShowClaimSquaresDialog(false);
                   setInviteName('');
                   setInviteEmail('');
                   setSelectedSquares([]);
                   setError(null);
+                  setShowEditPlayersMenu(true);
                 }}
                 className="btn-secondary"
                 disabled={loading}
               >
-                Cancel
+                Back
               </button>
               <button
                 onClick={handleInviteAndClaim}
@@ -715,6 +712,71 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                 disabled={loading || selectedSquares.length === 0}
               >
                 {loading ? 'Submitting...' : 'Submit'}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Remove Players Dialog */}
+      {mounted && showRemovePlayersDialog && createPortal(
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-2xl w-full shadow-2xl max-h-[80vh] flex flex-col">
+            <h3 className="font-display text-2xl text-white mb-4">
+              Remove Players
+            </h3>
+
+            <p className="text-white/80 text-sm mb-4">
+              Click on any claimed square to remove that claim.
+            </p>
+
+            {claimedSquares.length === 0 ? (
+              <div className="text-white/60 text-center py-8">
+                No squares have been claimed yet.
+              </div>
+            ) : (
+              <div className="overflow-y-auto flex-1 mb-4">
+                <div className="grid grid-cols-1 gap-2">
+                  {claimedSquares.map((square) => (
+                    <button
+                      key={`${square.row}-${square.col}`}
+                      onClick={() => {
+                        if (window.confirm(`Remove claim for square #${getSquareNumber(square.row, square.col)} claimed by ${square.claimed_display_name}?`)) {
+                          handleRemoveClaim(square.row, square.col);
+                          setShowRemovePlayersDialog(false);
+                          setShowEditPlayersMenu(false);
+                        }
+                      }}
+                      disabled={loading}
+                      className="flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-stadium-gold/50 rounded transition-all disabled:opacity-50 disabled:cursor-not-allowed text-left"
+                    >
+                      <div>
+                        <span className="text-white font-semibold">
+                          Square #{getSquareNumber(square.row, square.col)} ({square.row}, {square.col})
+                        </span>
+                        <span className="text-white/60 text-sm block">
+                          Claimed by: {square.claimed_display_name}
+                        </span>
+                      </div>
+                      <span className="text-red-400 text-sm font-medium">Remove</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-end border-t border-white/10 pt-4">
+              <button
+                onClick={() => {
+                  setShowRemovePlayersDialog(false);
+                  setError(null);
+                  setShowEditPlayersMenu(true);
+                }}
+                className="btn-secondary"
+                disabled={loading}
+              >
+                Back
               </button>
             </div>
           </div>
