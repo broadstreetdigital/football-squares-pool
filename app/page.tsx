@@ -55,12 +55,12 @@ export default async function HomePage() {
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-6">
         <div className="flex flex-row justify-between items-center gap-4">
-          <h1 className="font-display text-xl sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
-            <img src="/logo.png" alt="Football" className="w-16 h-16 sm:w-10 sm:h-10 flex-shrink-0" />
+          <h1 className="font-display text-2xl sm:text-4xl text-stadium-gold leading-[0.9] flex items-center gap-2 sm:gap-3">
+            <img src="/logo.png" alt="Football" className="w-14 h-14 sm:w-10 sm:h-10 flex-shrink-0" />
             <span className="leading-[0.9]">SQUARES<br className="sm:hidden" /> POOL</span>
           </h1>
 
-          <div className="flex flex-wrap gap-2 sm:gap-4 justify-end">
+          <div className="flex flex-nowrap gap-2 sm:gap-4 justify-end">
             {session ? (
               <>
                 <Link href="/dashboard" className="btn-secondary text-sm sm:text-base">
