@@ -133,8 +133,16 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Return more detailed error in development
+    const isDevelopment = process.env.NODE_ENV !== 'production';
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        ...(isDevelopment && error instanceof Error && {
+          details: error.message,
+          stack: error.stack
+        })
+      },
       { status: 500 }
     );
   }
