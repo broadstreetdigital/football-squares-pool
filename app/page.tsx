@@ -89,8 +89,8 @@ export default async function HomePage() {
       {/* Hero Section */}
       <main className="relative z-10 container mx-auto pl-16 pr-4 md:px-20 py-6 md:py-16">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-display text-3xl leading-[1.1] sm:text-8xl text-white mb-4 sm:mb-6 sm:leading-[0.95]">
-            <span className="whitespace-nowrap">MANAGE YOUR SQUARES POOL</span>
+          <h2 className="font-display text-5xl leading-[1.1] sm:text-8xl text-white mb-4 sm:mb-6 sm:leading-[0.95]">
+            MANAGE YOUR SQUARES POOL
             <br />
             <span className="text-stadium-gold block">
               <RotatingText />
