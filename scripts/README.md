@@ -47,6 +47,7 @@ curl -X POST http://localhost:3000/api/admin/init-db
 ## Available Migrations
 
 - `migrate-pool-invitations.sql` - Adds the pool_invitations table for the invite & claim squares feature
+- `migrate-email-consent.sql` - Adds the email_consent column to the users table for privacy policy and email opt-in tracking
 
 ## After Running Migration
 
