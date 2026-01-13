@@ -325,13 +325,13 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
       <div className="space-y-4">
         {/* Board Actions */}
-        <div className="grid grid-cols-2 md:flex md:items-center gap-2 md:gap-4">
+        <div className="grid grid-cols-2 gap-2 md:flex md:items-center md:gap-4 md:flex-wrap">
           {/* Primary action buttons first (yellow/gold) */}
           {status === 'open' && (
             <button
               onClick={handleLock}
               disabled={loading}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1 md:w-auto"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
             >
               {loading ? 'Locking...' : 'Lock Board'}
             </button>
@@ -341,7 +341,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={() => setShowRandomizeConfirm(true)}
               disabled={loading}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1 md:w-auto"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
             >
               Randomize Digits
             </button>
@@ -351,7 +351,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={() => setShowUnrandomizeConfirm(true)}
               disabled={loading}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1 md:w-auto"
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
             >
               Un-randomize
             </button>
@@ -362,7 +362,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={handleUnlock}
               disabled={loading}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1 md:w-auto"
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
             >
               {loading ? 'Unlocking...' : 'Unlock Board'}
             </button>
@@ -389,7 +389,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           <button
             onClick={() => setShowClearBoardConfirm(true)}
             disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 hover:bg-red-500/30 border-red-500/50 col-span-2 md:col-span-1 md:w-auto"
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 hover:bg-red-500/30 border-red-500/50 md:w-auto"
           >
             Clear Board
           </button>

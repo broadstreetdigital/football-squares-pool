@@ -139,7 +139,7 @@ export default async function PoolDetailPage({ params }: PageProps) {
             </div>
 
             {isOwner && (
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-stadium-gold/20 text-stadium-gold">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-stadium-gold/20 text-stadium-gold self-start">
                 You are the manager
               </span>
             )}
