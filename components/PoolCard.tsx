@@ -69,9 +69,8 @@ export function PoolCard({ pool, userSquareCount, availableSquares, isOwner }: P
 
           {availableSquares !== undefined && (
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-white/50">Squares Available:</span>
               <span className="text-white font-semibold">
-                {availableSquares}
+                {availableSquares} SQUARES AVAILABLE
               </span>
             </div>
           )}

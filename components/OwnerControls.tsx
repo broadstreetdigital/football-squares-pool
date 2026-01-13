@@ -12,6 +12,8 @@ import { createPortal } from 'react-dom';
 interface OwnerControlsProps {
   poolId: string;
   status: 'open' | 'locked' | 'numbered' | 'completed';
+  poolName: string;
+  gameName: string;
   squarePrice: number;
   maxSquaresPerUser: number;
   homeTeam: string;
@@ -26,7 +28,7 @@ interface OwnerControlsProps {
   }>;
 }
 
-export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules, squares }: OwnerControlsProps) {
+export function OwnerControls({ poolId, status, poolName, gameName, squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules, squares }: OwnerControlsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +42,8 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
   const [inviteName, setInviteName] = useState('');
   const [inviteEmail, setInviteEmail] = useState('');
   const [selectedSquares, setSelectedSquares] = useState<Array<{ row: number; col: number }>>([]);
+  const [newPoolName, setNewPoolName] = useState(poolName);
+  const [newGameName, setNewGameName] = useState(gameName);
   const [newSquarePrice, setNewSquarePrice] = useState(squarePrice.toString());
   const [newMaxSquares, setNewMaxSquares] = useState(maxSquaresPerUser.toString());
   const [newHomeTeam, setNewHomeTeam] = useState(homeTeam);
@@ -54,13 +58,15 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
   // Update local state when props change (after refresh)
   useEffect(() => {
+    setNewPoolName(poolName);
+    setNewGameName(gameName);
     setNewSquarePrice(squarePrice.toString());
     setNewMaxSquares(maxSquaresPerUser.toString());
     setNewHomeTeam(homeTeam);
     setNewAwayTeam(awayTeam);
     setNewGameTime(new Date(gameTime).toISOString().slice(0, 16));
     setNewRules(rules || '');
-  }, [squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules]);
+  }, [poolName, gameName, squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules]);
 
   const handleLock = async () => {
     setLoading(true);
@@ -157,6 +163,10 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
     setError(null);
 
     try {
+      if (!newPoolName.trim() || !newGameName.trim()) {
+        throw new Error('Pool name and game name cannot be empty');
+      }
+
       const price = parseFloat(newSquarePrice);
       const max = parseInt(newMaxSquares);
 
@@ -183,6 +193,8 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: newPoolName.trim(),
+          game_name: newGameName.trim(),
           square_price: price,
           max_squares_per_user: max,
           home_team: newHomeTeam.trim(),
@@ -495,6 +507,36 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div>
                   <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Pool Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newPoolName}
+                    onChange={(e) => setNewPoolName(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                    placeholder="Pool Name"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Game Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newGameName}
+                    onChange={(e) => setNewGameName(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                    placeholder="Game Name"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
                     Square Price ($)
                   </label>
                   <input
@@ -585,6 +627,8 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
               <button
                 onClick={() => {
                   setShowSettingsDialog(false);
+                  setNewPoolName(poolName);
+                  setNewGameName(gameName);
                   setNewSquarePrice(squarePrice.toString());
                   setNewMaxSquares(maxSquaresPerUser.toString());
                   setNewHomeTeam(homeTeam);

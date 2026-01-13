@@ -29,6 +29,8 @@ export async function PATCH(
 
     // Validate input
     const updates: {
+      name?: string;
+      game_name?: string;
       square_price?: number;
       max_squares_per_user?: number;
       home_team?: string;
@@ -37,6 +39,30 @@ export async function PATCH(
       rules?: string | null;
     } = {};
     const changes: Record<string, any> = {};
+
+    if (body.name !== undefined) {
+      const poolName = body.name.trim();
+      if (!poolName) {
+        return NextResponse.json(
+          { error: 'Pool name cannot be empty' },
+          { status: 400 }
+        );
+      }
+      updates.name = poolName;
+      changes.name = { from: pool.name, to: poolName };
+    }
+
+    if (body.game_name !== undefined) {
+      const gameName = body.game_name.trim();
+      if (!gameName) {
+        return NextResponse.json(
+          { error: 'Game name cannot be empty' },
+          { status: 400 }
+        );
+      }
+      updates.game_name = gameName;
+      changes.game_name = { from: pool.game_name, to: gameName };
+    }
 
     if (body.square_price !== undefined) {
       const price = parseFloat(body.square_price);

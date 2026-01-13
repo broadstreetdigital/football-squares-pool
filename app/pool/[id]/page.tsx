@@ -178,6 +178,8 @@ export default async function PoolDetailPage({ params }: PageProps) {
             <OwnerControls
               poolId={pool.id}
               status={pool.status}
+              poolName={pool.name}
+              gameName={pool.game_name}
               squarePrice={pool.square_price}
               maxSquaresPerUser={pool.max_squares_per_user}
               homeTeam={pool.home_team}
@@ -234,12 +236,14 @@ export default async function PoolDetailPage({ params }: PageProps) {
                 />
               )}
 
-            {/* Winners */}
-            <WinnersList winners={winners} />
+            {/* Winners - Only show after digits are randomized */}
+            {(pool.status === 'numbered' || pool.status === 'completed') && (
+              <WinnersList winners={winners} />
+            )}
 
             {/* Pool Info */}
             <div className="stadium-card p-6">
-              <h3 className="font-display text-xl text-white mb-4">
+              <h3 className="font-display text-2xl text-white mb-4">
                 POOL INFO
               </h3>
 
@@ -273,9 +277,8 @@ export default async function PoolDetailPage({ params }: PageProps) {
                   </span>
                 </div>
                 <div>
-                  <span className="text-white/50 block mb-1">Squares Available</span>
                   <span className="text-white font-semibold">
-                    {availableSquares} / 100
+                    {availableSquares} SQUARES AVAILABLE
                   </span>
                 </div>
                 <div>
