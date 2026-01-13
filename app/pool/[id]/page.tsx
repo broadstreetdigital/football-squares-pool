@@ -82,16 +82,11 @@ export default async function PoolDetailPage({ params }: PageProps) {
 
           <div className="flex items-center gap-4">
             {session ? (
-              <>
-                <Link href="/dashboard" className="btn-secondary">
-                  Dashboard
-                </Link>
-                <form action="/api/auth/logout" method="POST">
-                  <button type="submit" className="btn-secondary">
-                    Logout
-                  </button>
-                </form>
-              </>
+              <form action="/api/auth/logout" method="POST">
+                <button type="submit" className="btn-secondary">
+                  Logout
+                </button>
+              </form>
             ) : (
               <>
                 <Link href="/login" className="btn-secondary">
@@ -143,52 +138,6 @@ export default async function PoolDetailPage({ params }: PageProps) {
                 You are the manager
               </span>
             )}
-          </div>
-
-          {/* Game Info */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6 pb-6 border-b border-white/10">
-            <div>
-              <span className="text-white/50 text-sm block mb-1">Teams</span>
-              <span className="text-white font-semibold">
-                {pool.away_team} @ {pool.home_team}
-              </span>
-            </div>
-            <div>
-              <span className="text-white/50 text-sm block mb-1">
-                Game Time
-              </span>
-              <span className="text-white font-semibold">
-                {gameDate.toLocaleDateString()} at{' '}
-                {gameDate.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </span>
-            </div>
-            <div>
-              <span className="text-white/50 text-sm block mb-1">
-                Square Price
-              </span>
-              <span className="text-white font-semibold">
-                ${pool.square_price.toFixed(2)}
-              </span>
-            </div>
-            <div>
-              <span className="text-white/50 text-sm block mb-1">
-                Max Per User
-              </span>
-              <span className="text-white font-semibold">
-                {pool.max_squares_per_user} squares
-              </span>
-            </div>
-            <div>
-              <span className="text-white/50 text-sm block mb-1">
-                Squares Available
-              </span>
-              <span className="text-white font-semibold">
-                {availableSquares} / 100
-              </span>
-            </div>
           </div>
 
           {/* Pool Details (Entry Fee & Rules) */}
@@ -295,6 +244,40 @@ export default async function PoolDetailPage({ params }: PageProps) {
               </h3>
 
               <div className="space-y-3 text-sm">
+                <div>
+                  <span className="text-white/50 block mb-1">Teams</span>
+                  <span className="text-white font-semibold">
+                    {pool.away_team} @ {pool.home_team}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-white/50 block mb-1">Game Time</span>
+                  <span className="text-white font-semibold">
+                    {gameDate.toLocaleDateString()} at{' '}
+                    {gameDate.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-white/50 block mb-1">Square Price</span>
+                  <span className="text-white font-semibold">
+                    ${pool.square_price.toFixed(2)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-white/50 block mb-1">Max Per User</span>
+                  <span className="text-white font-semibold">
+                    {pool.max_squares_per_user} squares
+                  </span>
+                </div>
+                <div>
+                  <span className="text-white/50 block mb-1">Squares Available</span>
+                  <span className="text-white font-semibold">
+                    {availableSquares} / 100
+                  </span>
+                </div>
                 <div>
                   <span className="text-white/50 block mb-1">Created</span>
                   <span className="text-white">
