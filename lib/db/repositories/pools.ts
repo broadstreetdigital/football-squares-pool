@@ -29,7 +29,7 @@ export interface UpdatePoolData {
   entry_fee_info?: string;
   square_price?: number;
   max_squares_per_user?: number;
-  rules?: string;
+  rules?: string | null;
   home_team?: string;
   away_team?: string;
 }

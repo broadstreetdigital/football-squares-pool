@@ -28,7 +28,14 @@ export async function PATCH(
     }
 
     // Validate input
-    const updates: { square_price?: number; max_squares_per_user?: number } = {};
+    const updates: {
+      square_price?: number;
+      max_squares_per_user?: number;
+      home_team?: string;
+      away_team?: string;
+      game_time?: number;
+      rules?: string | null;
+    } = {};
     const changes: Record<string, any> = {};
 
     if (body.square_price !== undefined) {
@@ -53,6 +60,47 @@ export async function PATCH(
       }
       updates.max_squares_per_user = max;
       changes.max_squares_per_user = { from: pool.max_squares_per_user, to: max };
+    }
+
+    if (body.home_team !== undefined) {
+      const homeTeam = body.home_team.trim();
+      if (!homeTeam) {
+        return NextResponse.json(
+          { error: 'Home team cannot be empty' },
+          { status: 400 }
+        );
+      }
+      updates.home_team = homeTeam;
+      changes.home_team = { from: pool.home_team, to: homeTeam };
+    }
+
+    if (body.away_team !== undefined) {
+      const awayTeam = body.away_team.trim();
+      if (!awayTeam) {
+        return NextResponse.json(
+          { error: 'Away team cannot be empty' },
+          { status: 400 }
+        );
+      }
+      updates.away_team = awayTeam;
+      changes.away_team = { from: pool.away_team, to: awayTeam };
+    }
+
+    if (body.game_time !== undefined) {
+      const gameTime = parseInt(body.game_time);
+      if (isNaN(gameTime)) {
+        return NextResponse.json(
+          { error: 'Invalid game time' },
+          { status: 400 }
+        );
+      }
+      updates.game_time = gameTime;
+      changes.game_time = { from: pool.game_time, to: gameTime };
+    }
+
+    if (body.rules !== undefined) {
+      updates.rules = body.rules || null;
+      changes.rules = { from: pool.rules, to: body.rules || null };
     }
 
     if (Object.keys(updates).length === 0) {

@@ -14,6 +14,10 @@ interface OwnerControlsProps {
   status: 'open' | 'locked' | 'numbered' | 'completed';
   squarePrice: number;
   maxSquaresPerUser: number;
+  homeTeam: string;
+  awayTeam: string;
+  gameTime: number;
+  rules: string | null;
   squares?: Array<{
     row: number;
     col: number;
@@ -22,7 +26,7 @@ interface OwnerControlsProps {
   }>;
 }
 
-export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, squares }: OwnerControlsProps) {
+export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules, squares }: OwnerControlsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +42,10 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
   const [selectedSquares, setSelectedSquares] = useState<Array<{ row: number; col: number }>>([]);
   const [newSquarePrice, setNewSquarePrice] = useState(squarePrice.toString());
   const [newMaxSquares, setNewMaxSquares] = useState(maxSquaresPerUser.toString());
+  const [newHomeTeam, setNewHomeTeam] = useState(homeTeam);
+  const [newAwayTeam, setNewAwayTeam] = useState(awayTeam);
+  const [newGameTime, setNewGameTime] = useState(new Date(gameTime).toISOString().slice(0, 16));
+  const [newRules, setNewRules] = useState(rules || '');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -48,7 +56,11 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
   useEffect(() => {
     setNewSquarePrice(squarePrice.toString());
     setNewMaxSquares(maxSquaresPerUser.toString());
-  }, [squarePrice, maxSquaresPerUser]);
+    setNewHomeTeam(homeTeam);
+    setNewAwayTeam(awayTeam);
+    setNewGameTime(new Date(gameTime).toISOString().slice(0, 16));
+    setNewRules(rules || '');
+  }, [squarePrice, maxSquaresPerUser, homeTeam, awayTeam, gameTime, rules]);
 
   const handleLock = async () => {
     setLoading(true);
@@ -156,6 +168,15 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
         throw new Error('Max squares must be between 1 and 100');
       }
 
+      if (!newHomeTeam.trim() || !newAwayTeam.trim()) {
+        throw new Error('Team names cannot be empty');
+      }
+
+      const gameTimeMs = new Date(newGameTime).getTime();
+      if (isNaN(gameTimeMs)) {
+        throw new Error('Invalid game time');
+      }
+
       const res = await fetch(`/api/pools/${poolId}/settings`, {
         method: 'PATCH',
         headers: {
@@ -164,6 +185,10 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
         body: JSON.stringify({
           square_price: price,
           max_squares_per_user: max,
+          home_team: newHomeTeam.trim(),
+          away_team: newAwayTeam.trim(),
+          game_time: gameTimeMs,
+          rules: newRules.trim() || null,
         }),
       });
 
@@ -460,40 +485,98 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
       {/* Settings Dialog */}
       {mounted && showSettingsDialog && createPortal(
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-4 md:p-6 max-w-md w-full shadow-2xl">
-            <h3 className="font-display text-xl md:text-2xl text-white mb-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-2 md:p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-3 md:p-6 max-w-2xl w-full shadow-2xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto">
+            <h3 className="font-display text-xl md:text-2xl text-white mb-3 md:mb-4">
               Pool Settings
             </h3>
 
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Square Price ($)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={newSquarePrice}
+                    onChange={(e) => setNewSquarePrice(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Max Squares Per User (1-100)
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={newMaxSquares}
+                    onChange={(e) => setNewMaxSquares(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Away Team
+                  </label>
+                  <input
+                    type="text"
+                    value={newAwayTeam}
+                    onChange={(e) => setNewAwayTeam(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                    placeholder="Away Team"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                    Home Team
+                  </label>
+                  <input
+                    type="text"
+                    value={newHomeTeam}
+                    onChange={(e) => setNewHomeTeam(e.target.value)}
+                    className="input-field w-full text-sm md:text-base py-2 md:py-3"
+                    disabled={loading}
+                    placeholder="Home Team"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-white/80 text-sm mb-2">
-                  Square Price ($)
+                <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                  Game Time
                 </label>
                 <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={newSquarePrice}
-                  onChange={(e) => setNewSquarePrice(e.target.value)}
-                  className="input-field w-full"
+                  type="datetime-local"
+                  value={newGameTime}
+                  onChange={(e) => setNewGameTime(e.target.value)}
+                  className="input-field w-full text-sm md:text-base py-2 md:py-3"
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-white/80 text-sm mb-2">
-                  Max Squares Per User (1-100)
+                <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
+                  Rules / Notes (optional)
                 </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={newMaxSquares}
-                  onChange={(e) => setNewMaxSquares(e.target.value)}
-                  className="input-field w-full"
+                <textarea
+                  value={newRules}
+                  onChange={(e) => setNewRules(e.target.value)}
+                  className="input-field w-full text-sm md:text-base py-2 md:py-3 min-h-[80px] md:min-h-[100px]"
                   disabled={loading}
+                  placeholder="Add any rules or notes for participants..."
                 />
               </div>
             </div>
@@ -504,6 +587,10 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   setShowSettingsDialog(false);
                   setNewSquarePrice(squarePrice.toString());
                   setNewMaxSquares(maxSquaresPerUser.toString());
+                  setNewHomeTeam(homeTeam);
+                  setNewAwayTeam(awayTeam);
+                  setNewGameTime(new Date(gameTime).toISOString().slice(0, 16));
+                  setNewRules(rules || '');
                   setError(null);
                 }}
                 className="btn-secondary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"

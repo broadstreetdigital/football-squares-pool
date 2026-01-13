@@ -231,6 +231,10 @@ export default async function PoolDetailPage({ params }: PageProps) {
               status={pool.status}
               squarePrice={pool.square_price}
               maxSquaresPerUser={pool.max_squares_per_user}
+              homeTeam={pool.home_team}
+              awayTeam={pool.away_team}
+              gameTime={pool.game_time}
+              rules={pool.rules}
               squares={squares}
             />
           </div>
