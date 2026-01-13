@@ -91,10 +91,10 @@ export function InviteCodeForm({ poolId, poolName }: InviteCodeFormProps) {
               id="invite-code"
               type="text"
               value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
+              onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
               maxLength={8}
               required
-              className="input-field text-center text-lg tracking-wider font-mono"
+              className="input-field text-center text-lg tracking-wider font-mono uppercase"
               placeholder="Enter code"
               autoFocus
             />
