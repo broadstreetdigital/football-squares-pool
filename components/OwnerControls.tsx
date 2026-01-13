@@ -331,7 +331,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={handleLock}
               disabled={loading}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
             >
               {loading ? 'Locking...' : 'Lock Board'}
             </button>
@@ -341,7 +341,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={() => setShowRandomizeConfirm(true)}
               disabled={loading}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
             >
               Randomize Digits
             </button>
@@ -351,7 +351,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={() => setShowUnrandomizeConfirm(true)}
               disabled={loading}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
             >
               Un-randomize
             </button>
@@ -362,7 +362,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
             <button
               onClick={handleUnlock}
               disabled={loading}
-              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+              className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
             >
               {loading ? 'Unlocking...' : 'Unlock Board'}
             </button>
@@ -372,7 +372,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           <button
             onClick={() => setShowSettingsDialog(true)}
             disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
           >
             Pool Settings
           </button>
@@ -380,7 +380,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           <button
             onClick={() => setShowEditPlayersMenu(true)}
             disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto"
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
           >
             Edit Players
           </button>
@@ -389,7 +389,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
           <button
             onClick={() => setShowClearBoardConfirm(true)}
             disabled={loading}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 hover:bg-red-500/30 border-red-500/50 md:w-auto"
+            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed bg-red-500/20 hover:bg-red-500/30 border-red-500/50 md:w-auto text-sm py-2 px-3 md:text-base md:py-3 md:px-6"
           >
             Clear Board
           </button>
@@ -461,8 +461,8 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
       {/* Settings Dialog */}
       {mounted && showSettingsDialog && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
-            <h3 className="font-display text-2xl text-white mb-4">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-4 md:p-6 max-w-md w-full shadow-2xl">
+            <h3 className="font-display text-xl md:text-2xl text-white mb-4">
               Pool Settings
             </h3>
 
@@ -558,28 +558,28 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
       {/* Edit Players Menu */}
       {mounted && showEditPlayersMenu && createPortal(
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-md w-full shadow-2xl">
-            <h3 className="font-display text-2xl text-white mb-4">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-4 md:p-6 max-w-md w-full shadow-2xl">
+            <h3 className="font-display text-xl md:text-2xl text-white mb-3 md:mb-4">
               Edit Players
             </h3>
-            <p className="text-white/80 text-sm mb-6">
+            <p className="text-white/80 text-xs md:text-sm mb-4 md:mb-6">
               Choose an action to manage players in your pool.
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2 md:space-y-3">
               <button
                 onClick={() => {
                   setShowEditPlayersMenu(false);
                   setShowClaimSquaresDialog(true);
                 }}
-                className="w-full btn-primary text-left px-6 py-4 flex items-center justify-between"
+                className="w-full btn-primary text-left px-3 py-3 md:px-6 md:py-4 flex items-center justify-between"
                 disabled={loading}
               >
-                <div>
-                  <div className="font-semibold">Claim Squares for Someone</div>
-                  <div className="text-sm text-white/70 mt-1">Enter squares on behalf of a participant</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm md:text-base">Claim Squares for Someone</div>
+                  <div className="text-xs md:text-sm text-white/70 mt-0.5 md:mt-1">Enter squares on behalf of a participant</div>
                 </div>
-                <span className="text-2xl">→</span>
+                <span className="text-xl md:text-2xl ml-2 flex-shrink-0">→</span>
               </button>
 
               <button
@@ -587,14 +587,14 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   setShowEditPlayersMenu(false);
                   setShowRemovePlayersDialog(true);
                 }}
-                className="w-full btn-secondary text-left px-6 py-4 flex items-center justify-between"
+                className="w-full btn-secondary text-left px-3 py-3 md:px-6 md:py-4 flex items-center justify-between"
                 disabled={loading}
               >
-                <div>
-                  <div className="font-semibold">Remove Players</div>
-                  <div className="text-sm text-white/70 mt-1">Remove claimed squares from the board</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm md:text-base">Remove Players</div>
+                  <div className="text-xs md:text-sm text-white/70 mt-0.5 md:mt-1">Remove claimed squares from the board</div>
                 </div>
-                <span className="text-2xl">→</span>
+                <span className="text-xl md:text-2xl ml-2 flex-shrink-0">→</span>
               </button>
             </div>
 
