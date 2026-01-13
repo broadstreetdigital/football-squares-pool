@@ -18,7 +18,7 @@ export function PoolCard({ pool, userSquareCount, availableSquares, isOwner }: P
 
   return (
     <Link href={`/pool/${pool.id}`}>
-      <div className="stadium-card p-6 hover:bg-white/5 transition-all cursor-pointer relative group">
+      <div className="stadium-card p-6 md:hover:bg-white/5 transition-all cursor-pointer relative group">
         {/* Top right badges */}
         <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
           {isOwner && (
