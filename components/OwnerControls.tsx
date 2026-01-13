@@ -498,7 +498,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
               </div>
             </div>
 
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-2 md:gap-3 justify-end">
               <button
                 onClick={() => {
                   setShowSettingsDialog(false);
@@ -506,14 +506,14 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   setNewMaxSquares(maxSquaresPerUser.toString());
                   setError(null);
                 }}
-                className="btn-secondary"
+                className="btn-secondary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
                 onClick={handleUpdateSettings}
-                className="btn-primary"
+                className="btn-primary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}
@@ -598,13 +598,13 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
               </button>
             </div>
 
-            <div className="mt-6 flex justify-end">
+            <div className="mt-4 md:mt-6 flex justify-end">
               <button
                 onClick={() => {
                   setShowEditPlayersMenu(false);
                   setError(null);
                 }}
-                className="btn-secondary"
+                className="btn-secondary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"
                 disabled={loading}
               >
                 Cancel
@@ -617,19 +617,19 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
 
       {/* Claim Squares for Someone Dialog */}
       {mounted && showClaimSquaresDialog && createPortal(
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] flex flex-col">
-            <h3 className="font-display text-2xl text-white mb-4">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-2 md:p-4 z-[9999]">
+          <div className="bg-gradient-to-br from-green-900/95 to-green-800/95 border-2 border-stadium-gold rounded-lg p-3 md:p-6 max-w-4xl w-full shadow-2xl max-h-[95vh] md:max-h-[90vh] flex flex-col">
+            <h3 className="font-display text-lg md:text-2xl text-white mb-2 md:mb-4">
               Claim Squares for Someone
             </h3>
 
-            <p className="text-white/80 text-sm mb-4">
+            <p className="text-white/80 text-xs md:text-sm mb-3 md:mb-4">
               Claim squares on behalf of someone else. They'll receive an email invitation to complete their account and view the pool.
             </p>
 
-            <div className="space-y-4 mb-4 overflow-y-auto flex-1">
+            <div className="space-y-3 md:space-y-4 mb-3 md:mb-4 overflow-y-auto flex-1">
               <div>
-                <label className="block text-white/80 text-sm mb-2">
+                <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
                   Participant Name *
                 </label>
                 <input
@@ -637,13 +637,13 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="Enter name"
-                  className="input-field w-full"
+                  className="input-field w-full text-sm md:text-base py-2 md:py-3"
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-white/80 text-sm mb-2">
+                <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
                   Participant Email *
                 </label>
                 <input
@@ -651,32 +651,32 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="email@example.com"
-                  className="input-field w-full"
+                  className="input-field w-full text-sm md:text-base py-2 md:py-3"
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-white/80 text-sm mb-2">
+                <label className="block text-white/80 text-xs md:text-sm mb-1 md:mb-2">
                   Select Squares ({selectedSquares.length} selected)
                 </label>
-                <p className="text-white/60 text-xs mb-2">
+                <p className="text-white/60 text-[10px] md:text-xs mb-2">
                   Click on squares to select them for this participant
                 </p>
 
                 {unclaimedSquares.length === 0 ? (
-                  <div className="text-white/60 text-center py-4 bg-white/5 rounded">
+                  <div className="text-white/60 text-center py-4 bg-white/5 rounded text-xs md:text-sm">
                     No unclaimed squares available
                   </div>
                 ) : (
-                  <div className="overflow-y-auto max-h-[400px] bg-white/5 rounded p-3">
-                    <div className="grid grid-cols-10 gap-2">
+                  <div className="overflow-y-auto max-h-[300px] md:max-h-[400px] bg-white/5 rounded p-2 md:p-3">
+                    <div className="grid grid-cols-10 gap-1 md:gap-2">
                       {unclaimedSquares.map((square) => (
                         <button
                           key={`${square.row}-${square.col}`}
                           onClick={() => toggleSquareSelection(square.row, square.col)}
                           disabled={loading}
-                          className={`p-2 rounded border transition-all text-xs font-semibold ${
+                          className={`aspect-square flex items-center justify-center rounded border transition-all text-[10px] md:text-xs font-semibold ${
                             isSquareSelected(square.row, square.col)
                               ? 'bg-stadium-gold/30 border-stadium-gold text-white'
                               : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10 hover:border-white/40'
@@ -691,7 +691,7 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
               </div>
             </div>
 
-            <div className="flex gap-3 justify-end border-t border-white/10 pt-4">
+            <div className="flex gap-2 md:gap-3 justify-end border-t border-white/10 pt-3 md:pt-4">
               <button
                 onClick={() => {
                   setShowClaimSquaresDialog(false);
@@ -701,14 +701,14 @@ export function OwnerControls({ poolId, status, squarePrice, maxSquaresPerUser, 
                   setError(null);
                   setShowEditPlayersMenu(true);
                 }}
-                className="btn-secondary"
+                className="btn-secondary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"
                 disabled={loading}
               >
                 Back
               </button>
               <button
                 onClick={handleInviteAndClaim}
-                className="btn-primary"
+                className="btn-primary text-sm md:text-base py-2 px-3 md:py-3 md:px-6"
                 disabled={loading || selectedSquares.length === 0}
               >
                 {loading ? 'Submitting...' : 'Submit'}
