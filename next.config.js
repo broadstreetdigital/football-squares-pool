@@ -4,6 +4,13 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  // Include email templates in serverless functions
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/**': ['./lib/email/templates/**/*.html'],
+    },
+  },
+
   // Image optimization for Vercel
   images: {
     formats: ['image/avif', 'image/webp'],
