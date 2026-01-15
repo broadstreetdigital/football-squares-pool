@@ -107,7 +107,7 @@ export function CreatePoolForm() {
       </div>
 
       {/* Game Date/Time */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-white/80 mb-2">
             Game Date
@@ -135,7 +135,7 @@ export function CreatePoolForm() {
       </div>
 
       {/* Teams */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-white/80 mb-2">
             Away Team
@@ -163,7 +163,7 @@ export function CreatePoolForm() {
       </div>
 
       {/* Square Price & Max Squares */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-white/80 mb-2">
             Square Price ($)
@@ -212,7 +212,7 @@ export function CreatePoolForm() {
         <label className="block text-sm font-medium text-white/80 mb-2">
           Visibility
         </label>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <button
             type="button"
             onClick={() => setVisibility('public')}
@@ -248,8 +248,11 @@ export function CreatePoolForm() {
             name="invite_code"
             type="text"
             maxLength={8}
-            className="input-field"
+            className="input-field uppercase"
             placeholder="Leave blank to auto-generate"
+            onChange={(e) => {
+              e.target.value = e.target.value.toUpperCase();
+            }}
           />
         </div>
       )}

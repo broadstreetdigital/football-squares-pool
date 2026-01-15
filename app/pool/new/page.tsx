@@ -28,9 +28,6 @@ export default async function NewPoolPage() {
           </Link>
 
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="btn-secondary">
-              Dashboard
-            </Link>
             <form action="/api/auth/logout" method="POST">
               <button type="submit" className="btn-secondary">
                 Logout
