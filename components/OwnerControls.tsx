@@ -334,8 +334,6 @@ export function OwnerControls({ poolId, status, poolName, gameName, squarePrice,
     return row * 10 + col + 1;
   };
 
-  const unclaimedSquares = squares?.filter(s => !s.claimed_by_user_id && !s.claimed_display_name) || [];
-
   const claimedSquares = squares?.filter(s => s.claimed_by_user_id || s.claimed_display_name) || [];
 
   return (
@@ -703,7 +701,7 @@ export function OwnerControls({ poolId, status, poolName, gameName, squarePrice,
                   setShowEditPlayersMenu(false);
                   setShowClaimSquaresDialog(true);
                 }}
-                className="w-full btn-primary text-left px-3 py-3 md:px-6 md:py-4 flex items-center justify-between"
+                className="w-full btn-secondary text-left px-3 py-3 md:px-6 md:py-4 flex items-center justify-between"
                 disabled={loading}
               >
                 <div className="flex-1 min-w-0">
@@ -792,33 +790,37 @@ export function OwnerControls({ poolId, status, poolName, gameName, squarePrice,
                   Select Squares ({selectedSquares.length} selected)
                 </label>
                 <p className="text-white/60 text-[10px] md:text-xs mb-2">
-                  Click on squares to select them for this participant
+                  Click on available squares to select them for this participant
                 </p>
 
-                {unclaimedSquares.length === 0 ? (
-                  <div className="text-white/60 text-center py-4 bg-white/5 rounded text-xs md:text-sm">
-                    No unclaimed squares available
-                  </div>
-                ) : (
-                  <div className="overflow-y-auto max-h-[300px] md:max-h-[400px] bg-white/5 rounded p-2 md:p-3">
-                    <div className="grid grid-cols-10 gap-1 md:gap-2">
-                      {unclaimedSquares.map((square) => (
+                <div className="overflow-y-auto max-h-[300px] md:max-h-[400px] bg-white/5 rounded p-2 md:p-3">
+                  <div className="grid grid-cols-10 gap-1 md:gap-2">
+                    {Array.from({ length: 100 }, (_, i) => {
+                      const row = Math.floor(i / 10);
+                      const col = i % 10;
+                      const square = squares?.find(s => s.row === row && s.col === col);
+                      const isClaimed = square?.claimed_by_user_id || square?.claimed_display_name;
+                      const isSelected = isSquareSelected(row, col);
+
+                      return (
                         <button
-                          key={`${square.row}-${square.col}`}
-                          onClick={() => toggleSquareSelection(square.row, square.col)}
-                          disabled={loading}
+                          key={`${row}-${col}`}
+                          onClick={() => !isClaimed && toggleSquareSelection(row, col)}
+                          disabled={loading || !!isClaimed}
                           className={`aspect-square flex items-center justify-center rounded border transition-all text-[10px] md:text-xs font-semibold ${
-                            isSquareSelected(square.row, square.col)
+                            isClaimed
+                              ? 'bg-red-500/20 border-red-500/50 text-red-300 cursor-not-allowed'
+                              : isSelected
                               ? 'bg-stadium-gold/30 border-stadium-gold text-white'
                               : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10 hover:border-white/40'
-                          } disabled:opacity-50 disabled:cursor-not-allowed`}
+                          } disabled:opacity-50`}
                         >
-                          {getSquareNumber(square.row, square.col)}
+                          {getSquareNumber(row, col)}
                         </button>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
